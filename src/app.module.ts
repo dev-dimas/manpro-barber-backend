@@ -15,7 +15,7 @@ import { LoginModule } from './login/login.module';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: process.env.NODE_ENV === 'production' ? false : true,
     }),
     LoginModule,
     UserModule,

@@ -7,6 +7,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
 
+  // const ormConfigPath =
+  //   process.env.NODE_ENV === 'production'
+  //     ? 'orm.config.ts'
+  //     : 'orm.config.dev.ts';
+
+  // const ormConfig = require(`./${ormConfigPath}`);
+
   const config = new DocumentBuilder()
     .setTitle('Barber App')
     .setDescription('Complete documentation for barber app')
