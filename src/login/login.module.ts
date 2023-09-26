@@ -22,8 +22,4 @@ import { ConfigService } from '@nestjs/config';
   controllers: [LoginController],
   providers: [LoginService],
 })
-export class LoginModule {
-  constructor() {
-    console.log(process.env.JWT_SECRET_KEY);
-  }
-}
+export class LoginModule {}
