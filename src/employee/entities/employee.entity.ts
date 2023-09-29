@@ -11,6 +11,11 @@ export enum EmployeeRoleType {
   ADMIN = 'admin',
 }
 
+export enum GenderType {
+  L = 'l',
+  P = 'p',
+}
+
 @Entity('employee')
 export class EmployeeEntity {
   @PrimaryGeneratedColumn()
@@ -27,6 +32,9 @@ export class EmployeeEntity {
 
   @Column()
   no_tlp: string;
+
+  @Column()
+  gender: string;
 
   @Column({
     type: 'enum',

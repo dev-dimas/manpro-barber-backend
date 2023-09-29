@@ -32,6 +32,12 @@ export class CreateEmployeeDto {
   })
   no_tlp: string;
 
+  @IsString()
+  @ApiProperty({
+    default: 'l',
+  })
+  gender: string;
+
   @IsNotEmpty()
   @IsString()
   @IsEnum(EmployeeRoleType)
