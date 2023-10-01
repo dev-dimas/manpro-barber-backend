@@ -5,9 +5,8 @@ import { UserModule } from './user/user.module';
 import { LoginModule } from './login/user/login.module';
 import { EmployeeModule } from './employee/employee.module';
 import { LoginEmployeeModule } from './login/employee/login.employee.module';
-import { ServiceController } from './service/service.controller';
-import { ServiceService } from './service/service.service';
 import { ServiceModule } from './service/service.module';
+import { BarberModule } from './barber/barber.module';
 
 @Module({
   imports: [
@@ -27,8 +26,7 @@ import { ServiceModule } from './service/service.module';
     EmployeeModule,
     LoginEmployeeModule,
     ServiceModule,
+    BarberModule,
   ],
-  controllers: [ServiceController],
-  providers: [ServiceService],
 })
 export class AppModule {}

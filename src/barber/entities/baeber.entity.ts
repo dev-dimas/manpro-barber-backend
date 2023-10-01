@@ -1,15 +1,15 @@
-import { BarberEntity } from '../../barber/entities/baeber.entity';
+import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('service')
-export class ServiceEntity {
+@Entity('barber')
+export class BarberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,13 +17,13 @@ export class ServiceEntity {
   name: string;
 
   @Column()
-  price: number;
+  no_tlp: string;
 
-  @Column({ type: 'time' })
-  duration: string;
+  @Column()
+  address: string;
 
-  @ManyToOne(() => BarberEntity, (barber) => barber.services)
-  barber: BarberEntity;
+  @OneToMany(() => ServiceEntity, (service) => service.barber)
+  services: ServiceEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
