@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { EmployeeRoleType } from '../entities/employee.entity';
+import { EmployeeRoleType, GenderType } from '../entities/employee.entity';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -33,10 +33,11 @@ export class CreateEmployeeDto {
   no_tlp: string;
 
   @IsString()
+  @IsEnum(GenderType)
   @ApiProperty({
     default: 'l',
   })
-  gender: string;
+  gender: GenderType;
 
   @IsNotEmpty()
   @IsString()
