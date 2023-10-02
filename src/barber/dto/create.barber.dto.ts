@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateBarberDto {
@@ -8,6 +8,13 @@ export class CreateBarberDto {
     default: 'Barber Jaya',
   })
   name: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty({
+    default: 3,
+  })
+  barber: number;
 
   @IsNotEmpty()
   @IsString()

@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateBarberDto {
@@ -8,6 +8,13 @@ export class UpdateBarberDto {
     default: 'Barber Jaya',
   })
   name: string;
+
+  @IsOptional()
+  @IsNumber()
+  @ApiProperty({
+    default: 3,
+  })
+  barber: number;
 
   @IsOptional()
   @IsString()

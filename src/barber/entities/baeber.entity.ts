@@ -8,13 +8,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('barber')
+@Entity('barbershop')
 export class BarberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
+
+  @Column()
+  barber: number;
 
   @Column()
   no_tlp: string;
