@@ -22,6 +22,16 @@ export class BarberEntity {
   @Column()
   address: string;
 
+  @Column({
+    type: 'time',
+  })
+  open: string;
+
+  @Column({
+    type: 'time',
+  })
+  closed: string;
+
   @OneToMany(() => ServiceEntity, (service) => service.barber)
   services: ServiceEntity[];
 

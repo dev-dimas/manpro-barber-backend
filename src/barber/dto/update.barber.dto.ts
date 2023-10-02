@@ -22,4 +22,18 @@ export class UpdateBarberDto {
     default: 'Desa Jaya',
   })
   address: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    default: '08:00',
+  })
+  open: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    default: '21:00',
+  })
+  closed: string;
 }
