@@ -1,13 +1,15 @@
+import { BarberEntity } from '../../barber/entities/baeber.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('service')
-export class EmployeeEntity {
+export class ServiceEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,8 +22,8 @@ export class EmployeeEntity {
   @Column({ type: 'time' })
   duration: string;
 
-  @Column()
-  barber_id: string;
+  @ManyToOne(() => BarberEntity, (barber) => barber.services)
+  barber: BarberEntity;
 
   @CreateDateColumn()
   createdAt: Date;
