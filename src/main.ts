@@ -6,13 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-
-  // const ormConfigPath =
-  //   process.env.NODE_ENV === 'production'
-  //     ? 'orm.config.ts'
-  //     : 'orm.config.dev.ts';
-
-  // const ormConfig = require(`./${ormConfigPath}`);
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('Barber App')
@@ -24,7 +18,6 @@ async function bootstrap() {
     customSiteTitle: 'Barber App API',
   });
 
-  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
 bootstrap();

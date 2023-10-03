@@ -44,6 +44,7 @@ export class UserService {
   }
 
   update(username: string, updateUserDto: UpdateUserDto) {
+    console.log(updateUserDto);
     return `This action updates a #${username} user`;
   }
 }
