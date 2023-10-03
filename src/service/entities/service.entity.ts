@@ -1,4 +1,6 @@
 import { BarberEntity } from '../../barber/entities/baeber.entity';
+import { EmployeeEntity } from '../../employee/entities/employee.entity';
+
 import {
   Column,
   CreateDateColumn,
@@ -24,6 +26,9 @@ export class ServiceEntity {
 
   @ManyToOne(() => BarberEntity, (barber) => barber.services)
   barber: BarberEntity;
+
+  @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
+  employee: EmployeeEntity;
 
   @CreateDateColumn()
   createdAt: Date;
