@@ -1,7 +1,9 @@
+import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,7 +21,7 @@ export enum GenderType {
 @Entity('employee')
 export class EmployeeEntity {
   @PrimaryGeneratedColumn()
-  id_employee: number;
+  id: number;
 
   @Column({ unique: true })
   email: string;
@@ -33,8 +35,12 @@ export class EmployeeEntity {
   @Column()
   no_tlp: string;
 
-  @Column()
-  gender: string;
+  @Column({
+    type: 'enum',
+    enum: GenderType,
+    default: GenderType.L,
+  })
+  gender: GenderType;
 
   @Column({
     type: 'enum',
@@ -42,6 +48,9 @@ export class EmployeeEntity {
     default: EmployeeRoleType.ADMIN,
   })
   role: EmployeeRoleType;
+
+  @OneToMany(() => ServiceEntity, (service) => service.employee)
+  services: ServiceEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

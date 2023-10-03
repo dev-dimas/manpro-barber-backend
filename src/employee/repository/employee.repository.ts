@@ -19,7 +19,7 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
 
   async getEmployeeById(id: number) {
     return await this.findOneBy({
-      id_employee: id,
+      id,
     });
   }
 
@@ -33,14 +33,14 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
     return await this.createQueryBuilder()
       .update(EmployeeEntity)
       .set(employee)
-      .where('id_employee = :id', { id })
+      .where('id = :id', { id })
       .returning('*')
       .execute();
   }
 
   async deleteEmployeeById(id: number) {
     return await this.delete({
-      id_employee: id,
+      id,
     });
   }
 }
