@@ -7,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
+
   const config = new DocumentBuilder()
     .setTitle('Barber App')
     .setDescription('Complete documentation for barber app')
