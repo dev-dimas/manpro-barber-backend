@@ -1,3 +1,4 @@
+import { GenderType, EmployeeRoleType } from '../../enum';
 import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
@@ -8,20 +9,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum EmployeeRoleType {
-  OWNER = 'owner',
-  ADMIN = 'admin',
-}
-
-export enum GenderType {
-  L = 'l',
-  P = 'p',
-}
-
 @Entity('employee')
 export class EmployeeEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ unique: true })
   email: string;

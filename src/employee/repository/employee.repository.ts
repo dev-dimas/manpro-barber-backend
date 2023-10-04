@@ -17,7 +17,7 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
     return await this.find();
   }
 
-  async getEmployeeById(id: number) {
+  async getEmployeeById(id: string) {
     return await this.findOneBy({
       id,
     });
@@ -29,7 +29,7 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
     });
   }
 
-  async updateEmployeeById(id: number, employee: UpdateEmployeeDto) {
+  async updateEmployeeById(id: string, employee: UpdateEmployeeDto) {
     return await this.createQueryBuilder()
       .update(EmployeeEntity)
       .set(employee)
@@ -38,7 +38,7 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
       .execute();
   }
 
-  async deleteEmployeeById(id: number) {
+  async deleteEmployeeById(id: string) {
     return await this.delete({
       id,
     });

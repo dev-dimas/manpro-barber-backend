@@ -7,8 +7,19 @@ import { EmployeeModule } from './employee/employee.module';
 import { LoginEmployeeModule } from './login/employee/login.employee.module';
 import { ServiceModule } from './service/service.module';
 import { BarberModule } from './barber/barber.module';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { AuthGuard } from './guard/auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    JwtService,
+    Reflector,
+  ],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({

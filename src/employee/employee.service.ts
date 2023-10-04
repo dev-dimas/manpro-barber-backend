@@ -32,7 +32,7 @@ export class EmployeeService {
     return { statusCode: HttpStatus.CREATED, data: newEmployee };
   }
 
-  async updateEmployee(id: number, updateEmployeeDto: UpdateEmployeeDto) {
+  async updateEmployee(id: string, updateEmployeeDto: UpdateEmployeeDto) {
     updateEmployeeDto.password = await argon2.hash(updateEmployeeDto.password);
     const employee = await this.employeeRepository.updateEmployeeById(
       id,
@@ -45,7 +45,7 @@ export class EmployeeService {
     return { statusCode: HttpStatus.OK, data: employee.raw[0] };
   }
 
-  async getEmployee(id: number) {
+  async getEmployee(id: string) {
     const employee = await this.employeeRepository.getEmployeeById(id);
 
     if (!employee)
@@ -54,7 +54,7 @@ export class EmployeeService {
     return { statusCode: HttpStatus.OK, data: employee };
   }
 
-  async deleteEmployee(id: number) {
+  async deleteEmployee(id: string) {
     const employee = await this.employeeRepository.deleteEmployeeById(id);
 
     if (employee.affected == 0)
