@@ -1,6 +1,13 @@
-import { IsString, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsEnum,
+  IsUUID,
+  IsOptional,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { EmployeeRoleType, GenderType } from '../entities/employee.entity';
+import { GenderType, EmployeeRoleType } from '../../enum';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
@@ -30,7 +37,7 @@ export class CreateEmployeeDto {
   @ApiProperty({
     default: '019302392839',
   })
-  no_tlp: string;
+  noTlp: string;
 
   @IsString()
   @IsEnum(GenderType)
@@ -46,4 +53,9 @@ export class CreateEmployeeDto {
     default: 'admin',
   })
   role: EmployeeRoleType;
+
+  @IsOptional()
+  @IsString()
+  @IsUUID('all')
+  barber: any;
 }

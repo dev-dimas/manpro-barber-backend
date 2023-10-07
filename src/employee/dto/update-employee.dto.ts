@@ -1,6 +1,6 @@
 import { IsString, IsEmail, IsEnum, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { EmployeeRoleType, GenderType } from '../entities/employee.entity';
+import { GenderType, EmployeeRoleType } from '../../enum';
 
 export class UpdateEmployeeDto {
   @IsString()
@@ -30,8 +30,9 @@ export class UpdateEmployeeDto {
   @ApiProperty({
     default: '019302392839',
   })
-  no_tlp: string;
+  noTlp: string;
 
+  @IsOptional()
   @IsString()
   @IsEnum(GenderType)
   @ApiProperty({
