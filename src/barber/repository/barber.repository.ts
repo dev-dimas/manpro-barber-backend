@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { CreateBarberDto, UpdateBarberDto } from '../dto';
 import { Injectable } from '@nestjs/common';
-import { BarberEntity } from '../entities/baeber.entity';
+import { BarberEntity } from '../entities/barber.entity';
 
 @Injectable()
 export class BarberRepository extends Repository<BarberEntity> {
@@ -17,13 +17,13 @@ export class BarberRepository extends Repository<BarberEntity> {
     return await this.find();
   }
 
-  async getBarberById(id: number) {
+  async getBarberById(id: string) {
     return await this.findOneBy({
       id,
     });
   }
 
-  async updateBarberById(id: number, barber: UpdateBarberDto) {
+  async updateBarberById(id: string, barber: UpdateBarberDto) {
     return await this.createQueryBuilder()
       .update(BarberEntity)
       .set(barber)
@@ -32,7 +32,7 @@ export class BarberRepository extends Repository<BarberEntity> {
       .execute();
   }
 
-  async deleteBarberById(id: number) {
+  async deleteBarberById(id: string) {
     return await this.delete({
       id,
     });

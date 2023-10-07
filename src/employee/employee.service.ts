@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmployeeDto } from './dto';
 import * as argon2 from 'argon2';
-import { EmployeeRepository } from './repository/employee.repository';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { EmployeeRepository } from './repository/employee.repository';
 
 @Injectable()
 export class EmployeeService {
@@ -12,7 +12,9 @@ export class EmployeeService {
     private readonly employeeRepository: EmployeeRepository,
   ) {}
 
-  async createEmployee(createEmployeeDto: CreateEmployeeDto) {
+  async createEmployee(createEmployeeDto: CreateEmployeeDto, user: any) {
+    const employee = await this.employeeRepository.getEmployeeById(user.sub);
+
     const isEmailExist = await this.employeeRepository.getEmployeeByEmail(
       createEmployeeDto.email,
     );
@@ -25,6 +27,9 @@ export class EmployeeService {
     }
 
     createEmployeeDto.password = await argon2.hash(createEmployeeDto.password);
+
+    createEmployeeDto.barber = employee[0].barberId;
+
     const newEmployee = await this.employeeRepository.addEmployee(
       createEmployeeDto,
     );
@@ -32,8 +37,12 @@ export class EmployeeService {
     return { statusCode: HttpStatus.CREATED, data: newEmployee };
   }
 
-  async updateEmployee(id: number, updateEmployeeDto: UpdateEmployeeDto) {
-    updateEmployeeDto.password = await argon2.hash(updateEmployeeDto.password);
+  async updateEmployee(id: string, updateEmployeeDto: UpdateEmployeeDto) {
+    if (updateEmployeeDto.password) {
+      updateEmployeeDto.password = await argon2.hash(
+        updateEmployeeDto.password,
+      );
+    }
     const employee = await this.employeeRepository.updateEmployeeById(
       id,
       updateEmployeeDto,
@@ -45,7 +54,7 @@ export class EmployeeService {
     return { statusCode: HttpStatus.OK, data: employee.raw[0] };
   }
 
-  async getEmployee(id: number) {
+  async getEmployee(id: string) {
     const employee = await this.employeeRepository.getEmployeeById(id);
 
     if (!employee)
@@ -54,7 +63,7 @@ export class EmployeeService {
     return { statusCode: HttpStatus.OK, data: employee };
   }
 
-  async deleteEmployee(id: number) {
+  async deleteEmployee(id: string) {
     const employee = await this.employeeRepository.deleteEmployeeById(id);
 
     if (employee.affected == 0)

@@ -7,8 +7,28 @@ import { EmployeeModule } from './employee/employee.module';
 import { LoginEmployeeModule } from './login/employee/login.employee.module';
 import { ServiceModule } from './service/service.module';
 import { BarberModule } from './barber/barber.module';
+import { APP_GUARD, Reflector } from '@nestjs/core';
+import { AuthGuard } from './guard/auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import { RolesGuard } from './guard/role.guard';
+import { SeederController } from './seeder/seeder.controller';
+import { SeederService } from './seeder/seeder.service';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    JwtService,
+    Reflector,
+    SeederService,
+  ],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
@@ -27,6 +47,8 @@ import { BarberModule } from './barber/barber.module';
     LoginEmployeeModule,
     ServiceModule,
     BarberModule,
+    SeederModule,
   ],
+  controllers: [SeederController],
 })
 export class AppModule {}

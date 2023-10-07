@@ -1,4 +1,4 @@
-import { BarberEntity } from '../../barber/entities/baeber.entity';
+import { BarberEntity } from '../../barber/entities/barber.entity';
 import { EmployeeEntity } from '../../employee/entities/employee.entity';
 
 import {
@@ -12,8 +12,8 @@ import {
 
 @Entity('service')
 export class ServiceEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;

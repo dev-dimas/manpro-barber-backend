@@ -1,7 +1,7 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateBarberDto {
+export class CreateServiceDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -23,17 +23,13 @@ export class CreateBarberDto {
   })
   duration: string;
 
+  @IsOptional()
   @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    default: 1,
-  })
-  barber: number;
+  @IsString()
+  barber: string;
 
+  @IsOptional()
   @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    default: 1,
-  })
-  employee: number;
+  @IsString()
+  employee: string;
 }
