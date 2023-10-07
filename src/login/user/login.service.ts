@@ -33,7 +33,10 @@ export class LoginService {
     }
 
     delete user.password;
-    const accessToken = await this.jwtService.signAsync({ user });
+    const accessToken = await this.jwtService.signAsync({
+      sub: user.id,
+      role: 'user',
+    });
     return { statusCode: HttpStatus.OK, accessToken };
   }
 }

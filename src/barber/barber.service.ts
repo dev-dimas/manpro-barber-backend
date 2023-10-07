@@ -20,7 +20,7 @@ export class BarberService {
     return { statusCode: HttpStatus.OK, data: barber };
   }
 
-  async updateBarber(id: number, updateBarberDto: UpdateBarberDto) {
+  async updateBarber(id: string, updateBarberDto: UpdateBarberDto) {
     const barber = await this.barberRepository.updateBarberById(
       id,
       updateBarberDto,
@@ -32,7 +32,7 @@ export class BarberService {
     return { statusCode: HttpStatus.OK, data: barber.raw[0] };
   }
 
-  async getBarber(id: number) {
+  async getBarber(id: string) {
     const barber = await this.barberRepository.getBarberById(id);
 
     if (!barber)
@@ -41,7 +41,7 @@ export class BarberService {
     return { statusCode: HttpStatus.OK, data: barber };
   }
 
-  async deleteBarber(id: number) {
+  async deleteBarber(id: string) {
     const barber = await this.barberRepository.deleteBarberById(id);
 
     if (barber.affected == 0)
