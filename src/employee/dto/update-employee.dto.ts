@@ -30,8 +30,9 @@ export class UpdateEmployeeDto {
   @ApiProperty({
     default: '019302392839',
   })
-  no_tlp: string;
+  noTlp: string;
 
+  @IsOptional()
   @IsString()
   @IsEnum(GenderType)
   @ApiProperty({

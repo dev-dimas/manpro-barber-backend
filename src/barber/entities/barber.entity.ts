@@ -1,3 +1,4 @@
+import { EmployeeEntity } from '../../employee/entities/employee.entity';
 import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
@@ -10,8 +11,8 @@ import {
 
 @Entity('barbershop')
 export class BarberEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
@@ -20,7 +21,7 @@ export class BarberEntity {
   barber: number;
 
   @Column()
-  no_tlp: string;
+  noTlp: string;
 
   @Column()
   address: string;
@@ -34,6 +35,9 @@ export class BarberEntity {
     type: 'time',
   })
   closed: string;
+
+  @OneToMany(() => EmployeeEntity, (employee) => employee.barber)
+  employee: EmployeeEntity[];
 
   @OneToMany(() => ServiceEntity, (service) => service.barber)
   services: ServiceEntity[];

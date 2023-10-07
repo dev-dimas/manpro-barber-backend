@@ -7,15 +7,12 @@ import {
   Patch,
   Post,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
-import { Request } from 'express';
-import { Roles } from '../decorator/role.decorator';
+import { Public, Roles } from '../decorator';
 import { Role } from '../enum';
-import { RolesGuard } from '../guard/jwt.guard';
-import { Public } from '../decorator/public.decorator';
+import { Request } from 'express';
 
 @Controller('employee')
 export class EmployeeController {
@@ -27,13 +24,16 @@ export class EmployeeController {
     return this.employeeService.getAllEmployee();
   }
 
-  @Public()
+  @Roles(Role.ADMIN, Role.OWNER)
   @Post()
-  createEmpolyee(@Body() createEmployeeDto: CreateEmployeeDto) {
-    return this.employeeService.createEmployee(createEmployeeDto);
+  createEmpolyee(
+    @Body() createEmployeeDto: CreateEmployeeDto,
+    @Req() req: Request,
+  ) {
+    return this.employeeService.createEmployee(createEmployeeDto, req.user);
   }
 
-  @Public()
+  @Roles(Role.ADMIN, Role.OWNER)
   @Patch(':employee')
   updateEmployee(
     @Param('employee') id: string,
@@ -48,11 +48,9 @@ export class EmployeeController {
     return this.employeeService.getEmployee(id);
   }
 
-  @UseGuards(RolesGuard)
   @Roles(Role.OWNER)
   @Delete(':employee')
-  deleteEmployee(@Param('employee') id: string, @Req() req: Request) {
-    // console.log(req);
-    // return this.employeeService.deleteEmployee(id);
+  deleteEmployee(@Param('employee') id: string) {
+    return this.employeeService.deleteEmployee(id);
   }
 }

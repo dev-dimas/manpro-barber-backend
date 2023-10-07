@@ -4,11 +4,15 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from './guard/auth.guard';
 import { JwtService } from '@nestjs/jwt';
+import { RolesGuard } from './guard/role.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalGuards(new AuthGuard(new JwtService(), new Reflector()));
+  app.useGlobalGuards(
+    new AuthGuard(new JwtService(), new Reflector()),
+    new RolesGuard(new Reflector()),
+  );
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()

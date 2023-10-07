@@ -21,7 +21,7 @@ export class UpdateBarberDto {
   @ApiProperty({
     default: '082899083974',
   })
-  no_tlp: string;
+  noTlp: string;
 
   @IsOptional()
   @IsString()

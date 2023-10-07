@@ -1,9 +1,11 @@
+import { BarberEntity } from '../../barber/entities/barber.entity';
 import { GenderType, EmployeeRoleType } from '../../enum';
 import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -24,7 +26,7 @@ export class EmployeeEntity {
   password: string;
 
   @Column()
-  no_tlp: string;
+  noTlp: string;
 
   @Column({
     type: 'enum',
@@ -39,6 +41,9 @@ export class EmployeeEntity {
     default: EmployeeRoleType.ADMIN,
   })
   role: EmployeeRoleType;
+
+  @ManyToOne(() => BarberEntity, (barber) => barber.employee)
+  barber: BarberEntity;
 
   @OneToMany(() => ServiceEntity, (service) => service.employee)
   services: ServiceEntity[];

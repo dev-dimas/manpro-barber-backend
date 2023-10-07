@@ -18,9 +18,7 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
   }
 
   async getEmployeeById(id: string) {
-    return await this.findOneBy({
-      id,
-    });
+    return await this.query('Select * From employee Where id = $1', [id]);
   }
 
   async getEmployeeByEmail(email: string) {

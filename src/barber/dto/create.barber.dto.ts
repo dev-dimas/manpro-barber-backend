@@ -21,7 +21,7 @@ export class CreateBarberDto {
   @ApiProperty({
     default: '082899083974',
   })
-  no_tlp: string;
+  noTlp: string;
 
   @IsNotEmpty()
   @IsString()

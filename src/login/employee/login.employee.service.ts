@@ -36,6 +36,6 @@ export class LoginEmployeeService {
       sub: employee.id,
       role: employee.role,
     });
-    return { statusCode: HttpStatus.OK, accessToken, data: employee };
+    return { statusCode: HttpStatus.OK, accessToken };
   }
 }

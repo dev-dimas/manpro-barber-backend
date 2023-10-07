@@ -2,8 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EmployeeController } from './employee.controller';
 import { EmployeeService } from './employee.service';
 import { EmployeeRepository } from './repository/employee.repository';
-import { JwtService } from '@nestjs/jwt';
-import { Reflector } from '@nestjs/core';
 
 describe('EmployeeController', () => {
   let controller: EmployeeController;
@@ -13,8 +11,6 @@ describe('EmployeeController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [EmployeeController],
       providers: [
-        JwtService,
-        Reflector,
         EmployeeService,
         {
           provide: EmployeeRepository,
