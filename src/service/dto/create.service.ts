@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsUUID,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateServiceDto {
@@ -24,12 +30,12 @@ export class CreateServiceDto {
   duration: string;
 
   @IsOptional()
-  @IsNotEmpty()
+  @IsUUID('all')
   @IsString()
-  barber: string;
+  barber: any;
 
   @IsOptional()
-  @IsNotEmpty()
+  @IsUUID('all')
   @IsString()
-  employee: string;
+  employee: any;
 }

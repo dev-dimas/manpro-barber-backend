@@ -7,10 +7,12 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('service')
+@Unique(['name', 'barber'])
 export class ServiceEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
