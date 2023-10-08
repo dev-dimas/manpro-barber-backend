@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateServiceDto {
@@ -22,4 +22,9 @@ export class UpdateServiceDto {
     default: '00:40',
   })
   duration: string;
+
+  @IsOptional()
+  @IsString()
+  @IsUUID('all')
+  employee: any;
 }
