@@ -13,7 +13,10 @@ export class EmployeeService {
   ) {}
 
   async createEmployee(createEmployeeDto: CreateEmployeeDto, user: any) {
-    const employee = await this.employeeRepository.getEmployeeById(user.sub);
+    const employee = await this.getEmployee(user.sub);
+
+    if (!employee)
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     const isEmailExist = await this.employeeRepository.getEmployeeByEmail(
       createEmployeeDto.email,
@@ -49,7 +52,7 @@ export class EmployeeService {
     );
 
     if (employee.affected == 0)
-      throw new HttpException(`Id employee not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     return { statusCode: HttpStatus.OK, data: employee.raw[0] };
   }
@@ -58,7 +61,7 @@ export class EmployeeService {
     const employee = await this.employeeRepository.getEmployeeById(id);
 
     if (!employee)
-      throw new HttpException(`Id employee not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     return { statusCode: HttpStatus.OK, data: employee };
   }
@@ -67,7 +70,7 @@ export class EmployeeService {
     const employee = await this.employeeRepository.deleteEmployeeById(id);
 
     if (employee.affected == 0)
-      throw new HttpException(`Id employee not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     return { statusCode: HttpStatus.OK, data: employee.raw[0] };
   }

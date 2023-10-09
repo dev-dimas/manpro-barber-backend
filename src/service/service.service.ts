@@ -20,6 +20,8 @@ export class ServiceService {
 
   async createService(createServiceDto: CreateServiceDto, user: any) {
     const employee = await this.employeeRepository.getEmployeeById(user.sub);
+    if (!employee)
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
     createServiceDto.barber = employee[0].barberId;
     createServiceDto.employee = user.sub;
     const service = await this.serviceRepository.addService(createServiceDto);

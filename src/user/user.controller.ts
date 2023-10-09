@@ -12,16 +12,13 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Get(':username')
-  findOne(@Param('username') username: string) {
-    return this.userService.findOne(username);
+  @Get(':user')
+  findOne(@Param('user') id: string) {
+    return this.userService.findOne(id);
   }
 
-  @Patch(':username')
-  update(
-    @Param('username') username: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.userService.update(username, updateUserDto);
+  @Patch(':user')
+  update(@Param('user') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(id, updateUserDto);
   }
 }
