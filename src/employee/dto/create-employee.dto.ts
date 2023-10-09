@@ -39,6 +39,7 @@ export class CreateEmployeeDto {
   })
   noTlp: string;
 
+  @IsNotEmpty()
   @IsString()
   @IsEnum(GenderType)
   @ApiProperty({

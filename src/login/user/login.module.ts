@@ -5,6 +5,7 @@ import { UserEntity } from '../../user/entities/user.entity';
 import { LoginController } from './login.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UserRepository } from '../../user/repository/user.repository';
 
 @Module({
   imports: [
@@ -20,6 +21,6 @@ import { ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService],
+  providers: [LoginService, UserRepository],
 })
 export class LoginModule {}
