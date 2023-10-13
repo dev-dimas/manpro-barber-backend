@@ -38,4 +38,10 @@ export class SeederService {
 
     return { statusCode: HttpStatus.CREATED, data: { barber, employee } };
   }
+
+  async deleteSeeder() {
+    await this.barberRepository.query('truncate barbershop cascade');
+
+    return { statusCode: HttpStatus.OK };
+  }
 }

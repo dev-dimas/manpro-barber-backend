@@ -1,3 +1,4 @@
+import { BookingEntity } from '../../booking/entities/booking.entity';
 import { EmployeeEntity } from '../../employee/entities/employee.entity';
 import { ServiceEntity } from '../../service/entities/service.entity';
 import {
@@ -41,6 +42,9 @@ export class BarberEntity {
 
   @OneToMany(() => ServiceEntity, (service) => service.barber)
   services: ServiceEntity[];
+
+  @OneToMany(() => BookingEntity, (booking) => booking.barber)
+  booking: ServiceEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

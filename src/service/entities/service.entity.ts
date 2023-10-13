@@ -1,3 +1,4 @@
+import { DetailBookingEntity } from '../../booking/entities';
 import { BarberEntity } from '../../barber/entities/barber.entity';
 import { EmployeeEntity } from '../../employee/entities/employee.entity';
 
@@ -6,6 +7,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -31,6 +33,12 @@ export class ServiceEntity {
 
   @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
   employee: EmployeeEntity;
+
+  @OneToMany(
+    () => DetailBookingEntity,
+    (detailBooking) => detailBooking.service,
+  )
+  detailBooking: DetailBookingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
