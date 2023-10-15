@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ServiceRepository } from './repository/service.repository';
 import { CreateServiceDto, UpdateServiceDto } from './dto';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
@@ -7,9 +6,7 @@ import { EmployeeRepository } from '../employee/repository/employee.repository';
 @Injectable()
 export class ServiceService {
   constructor(
-    @InjectRepository(ServiceRepository)
     private readonly serviceRepository: ServiceRepository,
-    @InjectRepository(EmployeeRepository)
     private readonly employeeRepository: EmployeeRepository,
   ) {}
 
@@ -20,7 +17,8 @@ export class ServiceService {
 
   async createService(createServiceDto: CreateServiceDto, user: any) {
     const employee = await this.employeeRepository.getEmployeeById(user.sub);
-    createServiceDto.barber = employee[0].barberId;
+    if (!employee)
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
     createServiceDto.employee = user.sub;
     const service = await this.serviceRepository.addService(createServiceDto);
     return { statusCode: HttpStatus.CREATED, data: service };

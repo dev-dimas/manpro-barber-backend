@@ -17,7 +17,6 @@ describe('EmployeeService', () => {
           provide: EmployeeRepository,
           useValue: {
             getEmployeeByEmail: jest.fn(),
-            addEmployee: jest.fn(),
           },
         },
       ],

@@ -39,6 +39,7 @@ export class CreateEmployeeDto {
   })
   noTlp: string;
 
+  @IsNotEmpty()
   @IsString()
   @IsEnum(GenderType)
   @ApiProperty({
@@ -53,9 +54,4 @@ export class CreateEmployeeDto {
     default: 'admin',
   })
   role: EmployeeRoleType;
-
-  @IsOptional()
-  @IsString()
-  @IsUUID('all')
-  barber: any;
 }

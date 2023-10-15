@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmployeeDto } from './dto';
 import * as argon2 from 'argon2';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
@@ -7,13 +6,13 @@ import { EmployeeRepository } from './repository/employee.repository';
 
 @Injectable()
 export class EmployeeService {
-  constructor(
-    @InjectRepository(EmployeeRepository)
-    private readonly employeeRepository: EmployeeRepository,
-  ) {}
+  constructor(private readonly employeeRepository: EmployeeRepository) {}
 
   async createEmployee(createEmployeeDto: CreateEmployeeDto, user: any) {
-    const employee = await this.employeeRepository.getEmployeeById(user.sub);
+    const employee = await this.getEmployee(user.sub);
+
+    if (!employee)
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     const isEmailExist = await this.employeeRepository.getEmployeeByEmail(
       createEmployeeDto.email,
@@ -27,8 +26,6 @@ export class EmployeeService {
     }
 
     createEmployeeDto.password = await argon2.hash(createEmployeeDto.password);
-
-    createEmployeeDto.barber = employee[0].barberId;
 
     const newEmployee = await this.employeeRepository.addEmployee(
       createEmployeeDto,
@@ -49,7 +46,7 @@ export class EmployeeService {
     );
 
     if (employee.affected == 0)
-      throw new HttpException(`Id employee not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     return { statusCode: HttpStatus.OK, data: employee.raw[0] };
   }
@@ -58,7 +55,7 @@ export class EmployeeService {
     const employee = await this.employeeRepository.getEmployeeById(id);
 
     if (!employee)
-      throw new HttpException(`Id employee not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     return { statusCode: HttpStatus.OK, data: employee };
   }
@@ -67,7 +64,7 @@ export class EmployeeService {
     const employee = await this.employeeRepository.deleteEmployeeById(id);
 
     if (employee.affected == 0)
-      throw new HttpException(`Id employee not found`, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
 
     return { statusCode: HttpStatus.OK, data: employee.raw[0] };
   }

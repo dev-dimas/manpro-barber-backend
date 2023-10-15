@@ -1,30 +1,33 @@
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateBarberDto, UpdateBarberDto } from '../dto';
 import { Injectable } from '@nestjs/common';
 import { BarberEntity } from '../entities/barber.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class BarberRepository extends Repository<BarberEntity> {
-  constructor(private dataSource: DataSource) {
-    super(BarberEntity, dataSource.createEntityManager());
-  }
+export class BarberRepository {
+  constructor(
+    @InjectRepository(BarberEntity)
+    private readonly repository: Repository<BarberEntity>,
+  ) {}
 
   async addBarber(barber: CreateBarberDto) {
-    return await this.save(barber);
+    return await this.repository.save(barber);
   }
 
   async getAllBarber() {
-    return await this.find();
+    return await this.repository.find();
   }
 
   async getBarberById(id: string) {
-    return await this.findOneBy({
+    return await this.repository.findOneBy({
       id,
     });
   }
 
   async updateBarberById(id: string, barber: UpdateBarberDto) {
-    return await this.createQueryBuilder()
+    return await this.repository
+      .createQueryBuilder()
       .update(BarberEntity)
       .set(barber)
       .where('id = :id', { id })
@@ -33,7 +36,7 @@ export class BarberRepository extends Repository<BarberEntity> {
   }
 
   async deleteBarberById(id: string) {
-    return await this.delete({
+    return await this.repository.delete({
       id,
     });
   }

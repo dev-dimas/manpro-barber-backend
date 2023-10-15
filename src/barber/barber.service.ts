@@ -1,14 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { BarberRepository } from './repository/barber.repository';
 import { CreateBarberDto, UpdateBarberDto } from './dto';
 
 @Injectable()
 export class BarberService {
-  constructor(
-    @InjectRepository(BarberRepository)
-    private readonly barberRepository: BarberRepository,
-  ) {}
+  constructor(private readonly barberRepository: BarberRepository) {}
 
   async createBarber(createBarberDto: CreateBarberDto) {
     const barber = await this.barberRepository.addBarber(createBarberDto);
