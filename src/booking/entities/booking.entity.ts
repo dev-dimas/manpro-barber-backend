@@ -9,7 +9,6 @@ import {
 } from 'typeorm';
 import { BookingStatus } from '../../enum';
 import { UserEntity } from '../../user/entities/user.entity';
-import { BarberEntity } from '../../barber/entities/barber.entity';
 import { DetailBookingEntity } from './detail.booking.entity';
 
 @Entity('booking')
@@ -48,9 +47,6 @@ export class BookingEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.booking)
   user: UserEntity;
-
-  @ManyToOne(() => BarberEntity, (barber) => barber.booking)
-  barber: BarberEntity;
 
   @OneToMany(
     () => DetailBookingEntity,

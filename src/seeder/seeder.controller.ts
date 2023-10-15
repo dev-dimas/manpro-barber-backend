@@ -11,10 +11,4 @@ export class SeederController {
   create() {
     return this.seederService.createSeeder();
   }
-
-  @Public()
-  @Delete()
-  delete() {
-    return this.seederService.deleteSeeder();
-  }
 }

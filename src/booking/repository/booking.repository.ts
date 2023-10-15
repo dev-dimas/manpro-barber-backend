@@ -1,20 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { BookingEntity } from '../entities';
-import { Repository, DataSource, Between, Not } from 'typeorm';
+import { Repository, Between, Not } from 'typeorm';
 import { BookingStatus } from '../../enum';
-
+import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
-export class BookingRepository extends Repository<BookingEntity> {
-  constructor(private dataSource: DataSource) {
-    super(BookingEntity, dataSource.createEntityManager());
-  }
+export class BookingRepository {
+  constructor(
+    @InjectRepository(BookingEntity)
+    private readonly repository: Repository<BookingEntity>,
+  ) {}
 
   async getBookingByRangeStartEndTime(
     startTime: string,
     endTime: string,
     date: Date,
   ) {
-    return await this.count({
+    return await this.repository.count({
       where: [
         {
           startTime: Between(startTime, endTime),

@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { BookingRepository } from './repository';
 import { CreateBookingDto } from './dto';
 import dayjs from 'dayjs';
@@ -8,9 +7,7 @@ import { ServiceRepository } from '../service/repository/service.repository';
 @Injectable()
 export class BookingService {
   constructor(
-    @InjectRepository(BookingRepository)
     private readonly bookingRepository: BookingRepository,
-    @InjectRepository(ServiceRepository)
     private readonly serviceRepository: ServiceRepository,
   ) {}
 

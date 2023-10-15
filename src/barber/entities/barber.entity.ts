@@ -1,11 +1,7 @@
-import { BookingEntity } from '../../booking/entities/booking.entity';
-import { EmployeeEntity } from '../../employee/entities/employee.entity';
-import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -36,15 +32,6 @@ export class BarberEntity {
     type: 'time',
   })
   closed: string;
-
-  @OneToMany(() => EmployeeEntity, (employee) => employee.barber)
-  employee: EmployeeEntity[];
-
-  @OneToMany(() => ServiceEntity, (service) => service.barber)
-  services: ServiceEntity[];
-
-  @OneToMany(() => BookingEntity, (booking) => booking.barber)
-  booking: ServiceEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CreateEmployeeDto } from './dto';
 import * as argon2 from 'argon2';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
@@ -7,10 +6,7 @@ import { EmployeeRepository } from './repository/employee.repository';
 
 @Injectable()
 export class EmployeeService {
-  constructor(
-    @InjectRepository(EmployeeRepository)
-    private readonly employeeRepository: EmployeeRepository,
-  ) {}
+  constructor(private readonly employeeRepository: EmployeeRepository) {}
 
   async createEmployee(createEmployeeDto: CreateEmployeeDto, user: any) {
     const employee = await this.getEmployee(user.sub);
@@ -30,8 +26,6 @@ export class EmployeeService {
     }
 
     createEmployeeDto.password = await argon2.hash(createEmployeeDto.password);
-
-    createEmployeeDto.barber = employee[0].barberId;
 
     const newEmployee = await this.employeeRepository.addEmployee(
       createEmployeeDto,

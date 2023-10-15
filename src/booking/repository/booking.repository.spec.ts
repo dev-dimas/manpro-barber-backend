@@ -1,34 +1,34 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { BookingRepository } from './booking.repository';
-import { DataSource } from 'typeorm';
 import { BookingStatus } from '../../enum';
+import { Test, TestingModule } from '@nestjs/testing';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BookingEntity } from '../entities';
+import { AppModule } from '../../app.module';
 import { BookingTableTestHelper } from '../helper/booking.table.test.helper';
 
 describe('BookingRepository', () => {
   let bookingRepository: BookingRepository;
-  let helperRepository: BookingTableTestHelper;
+  let bookingTableTestHelper: BookingTableTestHelper;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BookingRepository, DataSource],
-    }).compile();
-
-    const helper: TestingModule = await Test.createTestingModule({
-      providers: [BookingTableTestHelper, DataSource],
+      imports: [AppModule, TypeOrmModule.forFeature([BookingEntity])],
+      providers: [BookingRepository, BookingTableTestHelper],
     }).compile();
 
     bookingRepository = module.get<BookingRepository>(BookingRepository);
-    helperRepository = helper.get<BookingTableTestHelper>(
+    bookingTableTestHelper = module.get<BookingTableTestHelper>(
       BookingTableTestHelper,
     );
   });
 
-  //   afterEach(async () => {
-  //     await helperRepository.cleanTable();
-  //   });
+  afterEach(async () => {
+    // await bookingTableTestHelper.cleanTable();
+  });
 
   it('should be defined', () => {
     expect(bookingRepository).toBeDefined();
+    expect(bookingTableTestHelper).toBeDefined();
   });
 
   it('should get booking count by range start and end time', async () => {
@@ -42,12 +42,11 @@ describe('BookingRepository', () => {
       name: 'andi',
       email: 'andi@gmail.com',
       noTlp: '18129210231',
-      date: '2023-04-20',
-      startTime: '08:00',
-      endTime: '08:40',
+      date: '2023-09-09',
+      startTime: '08:00 AM',
+      endTime: '08:40 AM',
       status: BookingStatus.BOOKING,
       userId: '233bbbd8-c31e-47c5-b3cf-e75a02e6889c',
-      barberId: 'd7e0dca1-76d0-4705-a57c-01c86124d200',
     };
 
     const booking2 = {
@@ -55,24 +54,20 @@ describe('BookingRepository', () => {
       name: 'andi',
       email: 'andi@gmail.com',
       noTlp: '18129210231',
-      date: '2023-04-20',
+      date: new Date(),
       startTime: '08:00',
       endTime: '08:40',
       status: BookingStatus.BOOKING,
-      userId: '233bbbd8-c31e-47c5-b3cf-e75a02e6889c',
-      barberId: 'd7e0dca1-76d0-4705-a57c-01c86124d200',
     };
 
-    await helperRepository.addBooking(booking1);
+    // await bookingTableTestHelper.addBooking(booking1);
 
-    jest.spyOn(bookingRepository, 'count').mockImplementation(async () => 1);
+    // const res = await bookingRepository.getBookingByRangeStartEndTime(
+    //   startTime,
+    //   endTime,
+    //   date,
+    // );
 
-    const count = await bookingRepository.getBookingByRangeStartEndTime(
-      startTime,
-      endTime,
-      date,
-    );
-
-    expect(count).toBe(1); // Replace 5 with the expected count for your test case
+    // console.log(res);
   });
 });

@@ -1,44 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { BookingEntity } from '../entities';
-import { Repository, DataSource } from 'typeorm';
+import { Repository } from 'typeorm';
 import { BookingStatus } from '../../enum';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class BookingTableTestHelper extends Repository<BookingEntity> {
-  constructor(private dataSource: DataSource) {
-    super(BookingEntity, dataSource.createEntityManager());
-  }
+export class BookingTableTestHelper {
+  constructor(
+    @InjectRepository(BookingEntity)
+    private readonly repository: Repository<BookingEntity>,
+  ) {}
 
   async addBooking({
     id = 'user-123',
     name = 'andi',
     email = 'andi@gmail.com',
     noTlp = '18129210231',
-    date = '2023-04-20',
+    date = '2023-10-09',
     startTime = '08:00',
     endTime = '09:00',
     status = BookingStatus.BOOKING,
-    userId = '1298293812',
-    barberId = '983208333',
+    userId = '233bbbd8-c31e-47c5-b3cf-e75a02e6889c',
   }) {
-    return await this.query(
-      'INSERT INTO booking VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)',
-      [
+    return await this.repository.save([
+      {
         name,
         email,
-        noTlp,
         date,
+        noTlp,
         startTime,
         endTime,
         status,
-        userId,
-        barberId,
         id,
-      ],
-    );
+        user: {
+          id: userId,
+        },
+      },
+    ]);
   }
 
   async cleanTable() {
-    return await this.query('DELETE FROM booking WHERE 1=1');
+    return await this.repository.query('DELETE FROM booking WHERE 1=1');
   }
 }

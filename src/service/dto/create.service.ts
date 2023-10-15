@@ -34,10 +34,5 @@ export class CreateServiceDto {
   @IsOptional()
   @IsUUID('all')
   @IsString()
-  barber: any;
-
-  @IsOptional()
-  @IsUUID('all')
-  @IsString()
   employee: any;
 }
