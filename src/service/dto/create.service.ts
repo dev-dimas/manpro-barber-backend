@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsOptional,
   IsUUID,
+  IsMilitaryTime,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -11,7 +12,7 @@ export class CreateServiceDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    default: 'Barber Jaya',
+    default: 'Potong',
   })
   name: string;
 
@@ -24,15 +25,11 @@ export class CreateServiceDto {
 
   @IsNotEmpty()
   @IsString()
+  @IsMilitaryTime()
   @ApiProperty({
     default: '00:40',
   })
   duration: string;
-
-  @IsOptional()
-  @IsUUID('all')
-  @IsString()
-  barber: any;
 
   @IsOptional()
   @IsUUID('all')

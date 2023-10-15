@@ -1,7 +1,9 @@
+import { BookingEntity } from '../../booking/entities/booking.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -34,6 +36,9 @@ export class UserEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => BookingEntity, (booking) => booking.user)
+  booking: BookingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
