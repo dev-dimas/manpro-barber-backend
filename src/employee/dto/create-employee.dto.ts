@@ -54,9 +54,4 @@ export class CreateEmployeeDto {
     default: 'admin',
   })
   role: EmployeeRoleType;
-
-  @IsOptional()
-  @IsString()
-  @IsUUID('all')
-  barber: any;
 }

@@ -1,34 +1,39 @@
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../entities/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class UserRepository extends Repository<UserEntity> {
-  constructor(private dataSource: DataSource) {
-    super(UserEntity, dataSource.createEntityManager());
-  }
+export class UserRepository {
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly repository: Repository<UserEntity>,
+  ) {}
 
   async addUser(user: CreateUserDto) {
-    return await this.save(user);
+    return await this.repository.save(user);
   }
 
   async getAllUser() {
-    return await this.find();
+    return await this.repository.find();
   }
 
   async getUserById(id: string) {
-    return await this.query('Select * From users Where id = $1', [id]);
+    return await this.repository.query('Select * From users Where id = $1', [
+      id,
+    ]);
   }
 
   async getUserByUsername(username: string) {
-    return await this.findOneBy({
+    return await this.repository.findOneBy({
       username,
     });
   }
 
   async updateUserById(id: string, user: UpdateUserDto) {
-    return await this.createQueryBuilder()
+    return await this.repository
+      .createQueryBuilder()
       .update(UserEntity)
       .set(user)
       .where('id = :id', { id })
@@ -37,7 +42,7 @@ export class UserRepository extends Repository<UserEntity> {
   }
 
   async deleteUserById(id: string) {
-    return await this.delete({
+    return await this.repository.delete({
       id,
     });
   }

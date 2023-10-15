@@ -1,6 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dto';
 import * as argon2 from 'argon2';
 import { UserRepository } from '../../user/repository/user.repository';
@@ -8,7 +7,6 @@ import { UserRepository } from '../../user/repository/user.repository';
 @Injectable()
 export class LoginService {
   constructor(
-    @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) {}

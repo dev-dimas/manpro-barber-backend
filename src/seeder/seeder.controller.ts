@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Delete, Post } from '@nestjs/common';
 import { Public } from '../decorator';
 import { SeederService } from './seeder.service';
 
@@ -8,7 +8,7 @@ export class SeederController {
 
   @Public()
   @Post()
-  createEmpolyee() {
+  create() {
     return this.seederService.createSeeder();
   }
 }

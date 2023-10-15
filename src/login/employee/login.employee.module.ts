@@ -4,9 +4,12 @@ import { ConfigService } from '@nestjs/config';
 import { LoginEmployeeController } from './login.employee.controller';
 import { LoginEmployeeService } from './login.employee.service';
 import { EmployeeRepository } from '../../employee/repository/employee.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmployeeEntity } from '../../employee/entities/employee.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([EmployeeEntity]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         return {

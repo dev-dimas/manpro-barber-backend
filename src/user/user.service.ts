@@ -1,15 +1,11 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
 import { UserRepository } from './repository/user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async create(createUserDto: CreateUserDto) {
     createUserDto.username = createUserDto.username.toLowerCase();

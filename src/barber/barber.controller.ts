@@ -9,8 +9,7 @@ import {
 } from '@nestjs/common';
 import { BarberService } from './barber.service';
 import { CreateBarberDto, UpdateBarberDto } from './dto';
-import { Public, Roles } from '../decorator';
-import { Role } from '../enum';
+import { Public } from '../decorator';
 
 @Controller('barber')
 export class BarberController {
@@ -28,7 +27,7 @@ export class BarberController {
     return this.barberService.createBarber(createBarberDto);
   }
 
-  @Roles(Role.OWNER, Role.ADMIN)
+  @Public()
   @Patch(':barber')
   updateBarber(
     @Param('barber') id: string,
@@ -43,7 +42,7 @@ export class BarberController {
     return this.barberService.getBarber(id);
   }
 
-  @Roles(Role.OWNER)
+  @Public()
   @Delete(':barber')
   deleteBarber(@Param('barber') id: string) {
     return this.barberService.deleteBarber(id);

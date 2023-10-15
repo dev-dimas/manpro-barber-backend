@@ -1,30 +1,33 @@
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { ServiceEntity } from '../entities/service.entity';
 import { CreateServiceDto, UpdateServiceDto } from '../dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class ServiceRepository extends Repository<ServiceEntity> {
-  constructor(private dataSource: DataSource) {
-    super(ServiceEntity, dataSource.createEntityManager());
-  }
+export class ServiceRepository {
+  constructor(
+    @InjectRepository(ServiceEntity)
+    private readonly repository: Repository<ServiceEntity>,
+  ) {}
 
   async addService(service: CreateServiceDto) {
-    return await this.save(service);
+    return await this.repository.save(service);
   }
 
   async getAllService() {
-    return await this.find();
+    return await this.repository.find();
   }
 
   async getServiceById(id: string) {
-    return await this.findOneBy({
+    return await this.repository.findOneBy({
       id,
     });
   }
 
   async updateServiceById(id: string, service: UpdateServiceDto) {
-    return await this.createQueryBuilder()
+    return await this.repository
+      .createQueryBuilder()
       .update(ServiceEntity)
       .set(service)
       .where('id = :id', { id })
@@ -33,7 +36,7 @@ export class ServiceRepository extends Repository<ServiceEntity> {
   }
 
   async deleteServiceById(id: string) {
-    return await this.delete({
+    return await this.repository.delete({
       id,
     });
   }
