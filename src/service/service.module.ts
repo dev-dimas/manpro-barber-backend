@@ -5,11 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServiceEntity } from './entities/service.entity';
 import { ServiceRepository } from './repository/service.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
+import { EmployeeEntity } from '../employee/entities/employee.entity';
 
 @Module({
   controllers: [ServiceController],
   providers: [ServiceService, ServiceRepository, EmployeeRepository],
-  imports: [TypeOrmModule.forFeature([ServiceEntity])],
+  imports: [TypeOrmModule.forFeature([ServiceEntity, EmployeeEntity])],
   exports: [ServiceRepository],
 })
 export class ServiceModule {}
