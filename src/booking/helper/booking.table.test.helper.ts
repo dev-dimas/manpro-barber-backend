@@ -22,21 +22,19 @@ export class BookingTableTestHelper {
     status = BookingStatus.BOOKING,
     userId = '233bbbd8-c31e-47c5-b3cf-e75a02e6889c',
   }) {
-    return await this.repository.save([
-      {
-        name,
-        email,
-        date,
-        noTlp,
-        startTime,
-        endTime,
-        status,
-        id,
-        user: {
-          id: userId,
-        },
+    return await this.repository.save({
+      name,
+      email,
+      date,
+      noTlp,
+      startTime,
+      endTime,
+      status,
+      id,
+      user: {
+        id: userId,
       },
-    ]);
+    });
   }
 
   async cleanTable() {
