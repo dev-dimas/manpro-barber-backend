@@ -46,7 +46,7 @@ export class BookingEntity {
   status: BookingStatus;
 
   @ManyToOne(() => UserEntity, (user) => user.booking)
-  user: UserEntity;
+  user!: UserEntity;
 
   @OneToMany(
     () => DetailBookingEntity,

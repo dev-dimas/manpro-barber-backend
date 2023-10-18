@@ -26,7 +26,7 @@ export class BookingService {
     }
 
     const numberOfBooking =
-      this.bookingRepository.getBookingByRangeStartEndTime(
+      this.bookingRepository.countBookingByRangeStartEndTime(
         createBookingDto.startTime,
         endTime.format('HH:mm'),
         createBookingDto.date,
