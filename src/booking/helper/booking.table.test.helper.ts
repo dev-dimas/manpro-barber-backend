@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BookingEntity } from '../entities';
 import { Repository } from 'typeorm';
 import { BookingStatus } from '../../enum';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BookingEntity } from '../entities/booking.entity';
 
 @Injectable()
 export class BookingTableTestHelper {
@@ -12,7 +12,7 @@ export class BookingTableTestHelper {
   ) {}
 
   async addBooking({
-    id = 'user-123',
+    id = 'booking-123',
     name = 'andi',
     email = 'andi@gmail.com',
     noTlp = '18129210231',
@@ -20,7 +20,6 @@ export class BookingTableTestHelper {
     startTime = '08:00',
     endTime = '09:00',
     status = BookingStatus.BOOKING,
-    userId = '233bbbd8-c31e-47c5-b3cf-e75a02e6889c',
   }) {
     return await this.repository.save({
       name,
@@ -31,9 +30,22 @@ export class BookingTableTestHelper {
       endTime,
       status,
       id,
-      user: {
-        id: userId,
-      },
+    });
+  }
+
+  async getAllUser() {
+    return await this.repository.find();
+  }
+
+  async findUserById(id: string) {
+    return await this.repository.findOneBy({
+      id,
+    });
+  }
+
+  async deleteUserById(id: string) {
+    return await this.repository.delete({
+      id,
     });
   }
 

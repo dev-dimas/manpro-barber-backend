@@ -1,4 +1,3 @@
-import { DetailBookingEntity } from '../../booking/entities';
 import { EmployeeEntity } from '../../employee/entities/employee.entity';
 
 import {
@@ -6,7 +5,6 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -27,12 +25,6 @@ export class ServiceEntity {
 
   @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
   employee: EmployeeEntity;
-
-  @OneToMany(
-    () => DetailBookingEntity,
-    (detailBooking) => detailBooking.service,
-  )
-  detailBooking: DetailBookingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
