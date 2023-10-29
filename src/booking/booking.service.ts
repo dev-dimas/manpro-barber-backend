@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { BookingRepository } from './repository';
 import { CreateBookingDto } from './dto';
 import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
+import { BookingRepository } from './repository/booking.repository';
 
 @Injectable()
 export class BookingService {
@@ -15,25 +15,26 @@ export class BookingService {
     let endTime = dayjs(
       `${createBookingDto.date} ${createBookingDto.startTime}`,
     );
-    for (let i = 0; i < createBookingDto.service.length; i++) {
-      const service = await this.serviceRepository.getServiceById(
-        createBookingDto.service[i],
-      );
-      const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
-      endTime = endTime
-        .add(Number(duration.format('H')), 'h')
-        .add(Number(duration.format('m')), 'm');
-    }
+
+    const service = await this.serviceRepository.getServiceById(
+      createBookingDto.service,
+    );
+
+    const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
+
+    endTime = endTime
+      .add(Number(duration.format('H')), 'h')
+      .add(Number(duration.format('m')), 'm');
 
     const numberOfBooking =
-      this.bookingRepository.countBookingByRangeStartEndTime(
+      await this.bookingRepository.countBookingByRangeStartEndTime(
         createBookingDto.startTime,
         endTime.format('HH:mm'),
         createBookingDto.date,
       );
 
-    console.log(createBookingDto.date);
-    console.log(numberOfBooking);
+    if (numberOfBooking >= 3)
+      return { statusCode: HttpStatus.CONFLICT, message: 'full' };
     return { statusCode: HttpStatus.CREATED };
   }
 }

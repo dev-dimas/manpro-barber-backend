@@ -1,11 +1,11 @@
 import { TestingModule, Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppModule } from '../../app.module';
-import { BookingEntity } from '../entities';
 import { BookingTableTestHelper } from '../helper/booking.table.test.helper';
 import { BookingRepository } from './booking.repository';
 import { BookingStatus } from '../../enum';
 import dayjs from 'dayjs';
+import { BookingEntity } from '../entities/booking.entity';
 
 describe('BookingRepository', () => {
   let bookingRepository: BookingRepository;

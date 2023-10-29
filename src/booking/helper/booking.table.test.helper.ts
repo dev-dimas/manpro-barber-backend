@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BookingEntity } from '../entities';
 import { Repository } from 'typeorm';
 import { BookingStatus } from '../../enum';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BookingEntity } from '../entities/booking.entity';
 
 @Injectable()
 export class BookingTableTestHelper {
