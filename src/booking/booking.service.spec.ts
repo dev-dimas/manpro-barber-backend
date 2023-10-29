@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BookingService } from './booking.service';
-import { BookingRepository, DetailBookingRepository } from './repository';
 import { ServiceRepository } from '../service/repository/service.repository';
+import { BookingRepository } from './repository/booking.repository';
 
 describe('BookingService', () => {
   let service: BookingService;
@@ -22,10 +22,6 @@ describe('BookingService', () => {
           useValue: {
             getServiceById: jest.fn(),
           },
-        },
-        {
-          provide: DetailBookingRepository,
-          useValue: {},
         },
       ],
     }).compile();

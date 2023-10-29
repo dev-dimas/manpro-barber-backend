@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsEmail,
-  IsEnum,
-  IsUUID,
-  IsOptional,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { GenderType, EmployeeRoleType } from '../../enum';
 

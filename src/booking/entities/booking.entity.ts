@@ -2,14 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
-  OneToMany,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BookingStatus } from '../../enum';
 import { UserEntity } from '../../user/entities/user.entity';
-import { DetailBookingEntity } from './detail.booking.entity';
+import { ServiceEntity } from '../../service/entities/service.entity';
 
 @Entity('booking')
 export class BookingEntity {
@@ -46,13 +47,11 @@ export class BookingEntity {
   status: BookingStatus;
 
   @ManyToOne(() => UserEntity, (user) => user.booking)
-  user: UserEntity;
+  user!: UserEntity;
 
-  @OneToMany(
-    () => DetailBookingEntity,
-    (detailBooking) => detailBooking.booking,
-  )
-  detailBooking: DetailBookingEntity[];
+  @OneToOne(() => ServiceEntity)
+  @JoinColumn()
+  service: ServiceEntity;
 
   @CreateDateColumn()
   createdAt: Date;
