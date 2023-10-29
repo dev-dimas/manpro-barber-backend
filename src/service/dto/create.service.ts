@@ -30,9 +30,4 @@ export class CreateServiceDto {
     default: '00:40',
   })
   duration: string;
-
-  @IsOptional()
-  @IsUUID('all')
-  @IsString()
-  employee: any;
 }
