@@ -11,8 +11,13 @@ export class ServiceRepository {
     private readonly repository: Repository<ServiceEntity>,
   ) {}
 
-  async addService(service: CreateServiceDto) {
-    return await this.repository.save(service);
+  async addService(service: CreateServiceDto, employeeId: string) {
+    return await this.repository.save({
+      name: service.name,
+      price: service.price,
+      duration: service.duration,
+      employeeId,
+    });
   }
 
   async getAllService() {
