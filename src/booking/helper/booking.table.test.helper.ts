@@ -33,17 +33,17 @@ export class BookingTableTestHelper {
     });
   }
 
-  async getAllUser() {
+  async getAllBooking() {
     return await this.repository.find();
   }
 
-  async findUserById(id: string) {
+  async findBookingById(id: string) {
     return await this.repository.findOneBy({
       id,
     });
   }
 
-  async deleteUserById(id: string) {
+  async deleteBookingById(id: string) {
     return await this.repository.delete({
       id,
     });

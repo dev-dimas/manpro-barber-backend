@@ -1,4 +1,10 @@
-import { IsString, IsEmail, IsEnum, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsBoolean,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { GenderType, EmployeeRoleType } from '../../enum';
 
@@ -47,4 +53,11 @@ export class UpdateEmployeeDto {
     default: 'admin',
   })
   role: EmployeeRoleType;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({
+    default: true,
+  })
+  isIncharge: boolean;
 }
