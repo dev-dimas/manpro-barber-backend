@@ -4,7 +4,6 @@ import { ServiceRepository } from './service.repository';
 import { AppModule } from '../../app.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServiceEntity } from '../entities/service.entity';
-import { it } from 'node:test';
 
 describe('ServiceRepository', () => {
   let serviceRepository: ServiceRepository;

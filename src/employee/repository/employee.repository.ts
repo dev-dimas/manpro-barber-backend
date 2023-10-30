@@ -20,9 +20,7 @@ export class EmployeeRepository {
   }
 
   async getEmployeeById(id: string) {
-    return await this.repository.query('Select * From employee Where id = $1', [
-      id,
-    ]);
+    return await this.repository.findOneBy({ id });
   }
 
   async getEmployeeByEmail(email: string) {
