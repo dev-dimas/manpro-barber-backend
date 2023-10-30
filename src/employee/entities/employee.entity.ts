@@ -1,3 +1,4 @@
+import { IsBoolean } from 'class-validator';
 import { GenderType, EmployeeRoleType } from '../../enum';
 import { ServiceEntity } from '../../service/entities/service.entity';
 import {
@@ -39,6 +40,12 @@ export class EmployeeEntity {
     default: EmployeeRoleType.ADMIN,
   })
   role: EmployeeRoleType;
+
+  @Column({
+    default: true,
+  })
+  @IsBoolean()
+  isIncharge: boolean;
 
   @OneToMany(() => ServiceEntity, (service) => service.employee)
   services: ServiceEntity[];
