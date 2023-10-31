@@ -6,30 +6,52 @@ import { BookingRepository } from './booking.repository';
 import { BookingStatus } from '../../enum';
 import dayjs from 'dayjs';
 import { BookingEntity } from '../entities/booking.entity';
+import { UserEntity } from '../../user/entities/user.entity';
+import { ServiceEntity } from '../../service/entities/service.entity';
+import { UserTableTestHelper } from '../../user/helper/user.table.test.helper';
+import { ServiceTableTestHelper } from '../../service/helper/service.table.helper';
 
 describe('BookingRepository', () => {
   let bookingRepository: BookingRepository;
   let bookingTableTestHelper: BookingTableTestHelper;
+  let userTableTestHelper: UserTableTestHelper;
+  let serviceTableTestHelper: ServiceTableTestHelper;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, TypeOrmModule.forFeature([BookingEntity])],
-      providers: [BookingRepository, BookingTableTestHelper],
+      imports: [
+        AppModule,
+        TypeOrmModule.forFeature([BookingEntity, UserEntity, ServiceEntity]),
+      ],
+      providers: [
+        BookingRepository,
+        BookingTableTestHelper,
+        UserTableTestHelper,
+        ServiceTableTestHelper,
+      ],
     }).compile();
 
     bookingRepository = module.get<BookingRepository>(BookingRepository);
     bookingTableTestHelper = module.get<BookingTableTestHelper>(
       BookingTableTestHelper,
     );
+    userTableTestHelper = module.get<UserTableTestHelper>(UserTableTestHelper);
+    serviceTableTestHelper = module.get<ServiceTableTestHelper>(
+      ServiceTableTestHelper,
+    );
   });
 
   afterEach(async () => {
     await bookingTableTestHelper.cleanTable();
+    await userTableTestHelper.cleanTable();
+    await userTableTestHelper.cleanTable();
   });
 
   it('should be defined', () => {
     expect(bookingRepository).toBeDefined();
     expect(bookingTableTestHelper).toBeDefined();
+    expect(userTableTestHelper).toBeDefined();
+    expect(serviceTableTestHelper).toBeDefined();
   });
 
   describe('function countBookingByRangeStartEndTime', () => {
@@ -107,6 +129,12 @@ describe('BookingRepository', () => {
       );
 
       expect(booking).toEqual(2);
+    });
+  });
+
+  describe('addBooking', () => {
+    it('should add booking to database and return correctly', async () => {
+      // Arrange
     });
   });
 });

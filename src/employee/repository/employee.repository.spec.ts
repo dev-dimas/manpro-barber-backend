@@ -223,4 +223,59 @@ describe('EmployeeRepository', () => {
       expect(res.affected).toEqual(1);
     });
   });
+
+  describe('countEmployeeInCharge', () => {
+    it('should count employee incharge and return correctly', async () => {
+      // Arrange
+      const employee1 = {
+        name: 'andi',
+        email: 'andi@gmail.com',
+        noTlp: '18129210231',
+        password: 'andi12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.ADMIN,
+        isIncharge: true,
+      };
+
+      const employee2 = {
+        name: 'ando',
+        email: 'ando@gmail.com',
+        noTlp: '28291212922',
+        password: 'ando12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.ADMIN,
+        isIncharge: true,
+      };
+
+      const employee3 = {
+        name: 'andu',
+        email: 'andu@gmail.com',
+        noTlp: '00029210231',
+        password: 'andi12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.ADMIN,
+        isIncharge: false,
+      };
+
+      const employee4 = {
+        name: 'doni',
+        email: 'doni@gmail.com',
+        noTlp: '11129210231',
+        password: 'doni12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.OWNER,
+      };
+
+      await employeeTableTestHelper.addEmployee(employee1);
+      await employeeTableTestHelper.addEmployee(employee2);
+      await employeeTableTestHelper.addEmployee(employee3);
+      await employeeTableTestHelper.addEmployee(employee4);
+
+      // Action
+      const res = await employeeRepository.countEmployeeInCharge();
+
+      // Assert
+      expect(res).toEqual(2);
+    });
+  });
 });

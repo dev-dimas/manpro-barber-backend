@@ -3,6 +3,7 @@ import { Repository, Brackets } from 'typeorm';
 import { BookingStatus } from '../../enum';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookingEntity } from '../entities/booking.entity';
+import { CreateBookingDto } from '../dto';
 @Injectable()
 export class BookingRepository {
   constructor(
@@ -33,5 +34,24 @@ export class BookingRepository {
         }),
       )
       .getCount();
+  }
+
+  async addBooking(
+    createBookingDto: CreateBookingDto,
+    endTime: any,
+    userId: string = null,
+    id: string,
+  ) {
+    return await this.repository.save({
+      id,
+      name: createBookingDto.name,
+      email: createBookingDto.email,
+      noTlp: createBookingDto.noTlp,
+      date: createBookingDto.date,
+      startTime: createBookingDto.startTime,
+      endTime,
+      userId,
+      serviceId: createBookingDto.service,
+    });
   }
 }
