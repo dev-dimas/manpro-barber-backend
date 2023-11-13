@@ -70,9 +70,7 @@ describe('BookingService', () => {
     //   };
     //   const employeeInCharge = 3;
     //   const numberOfBooking = 1;
-
     //   jest.spyOn(serviceRepository, 'getServiceById').mockReturnValue(services);
-
     //   // Action
     //   const res = await service.addBooking(createBookingDto, user);
     // });
