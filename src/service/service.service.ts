@@ -31,7 +31,7 @@ export class ServiceService {
     updateServiceDto: UpdateServiceDto,
     user: any,
   ) {
-    updateServiceDto.employee = user.sub;
+    const employee = user.sub;
     const service = await this.serviceRepository.updateServiceById(
       id,
       updateServiceDto,
