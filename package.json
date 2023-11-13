@@ -14,8 +14,8 @@
     "start:prod": "set NODE_ENV=production&& node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "set NODE_ENV=development&& jest --testTimeout=30000",
-    "test:watch": "jest --watch --testTimeout=30000",
-    "test:cov": "jest --coverage --testTimeout=30000",
+    "test:watch": "set NODE_ENV=development&& jest --watch --testTimeout=30000",
+    "test:cov": "set NODE_ENV=development&& jest --coverage --testTimeout=30000",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },

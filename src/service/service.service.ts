@@ -21,7 +21,7 @@ export class ServiceService {
       throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
     const service = await this.serviceRepository.addService(
       createServiceDto,
-      user.sub,
+      // user.sub,
     );
     return { statusCode: HttpStatus.CREATED, data: service };
   }

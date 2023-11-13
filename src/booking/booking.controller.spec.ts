@@ -3,6 +3,8 @@ import { BookingController } from './booking.controller';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingService } from './booking.service';
 import { BookingRepository } from './repository/booking.repository';
+import { EmployeeRepository } from '../employee/repository/employee.repository';
+import { Repository } from 'typeorm';
 
 describe('BookingController', () => {
   let controller: BookingController;
@@ -14,21 +16,22 @@ describe('BookingController', () => {
         BookingService,
         {
           provide: BookingRepository,
-          useValue: {
-            addBarber: jest.fn(),
-            getAllBarber: jest.fn(),
-          },
+          useClass: Repository,
         },
         {
           provide: ServiceRepository,
-          useValue: {
-            getServiceById: jest.fn(),
-          },
+          useClass: Repository,
+        },
+        {
+          provide: EmployeeRepository,
+          useClass: Repository,
         },
       ],
     }).compile();
 
     controller = module.get<BookingController>(BookingController);
+    module.get<ServiceRepository>(ServiceRepository);
+    module.get<EmployeeRepository>(EmployeeRepository);
   });
 
   it('should be defined', () => {

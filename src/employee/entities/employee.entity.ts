@@ -47,8 +47,8 @@ export class EmployeeEntity {
   @IsBoolean()
   isIncharge: boolean;
 
-  @OneToMany(() => ServiceEntity, (service) => service.employee)
-  services: ServiceEntity[];
+  // @OneToMany(() => ServiceEntity, (service) => service.employee)
+  // services: ServiceEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

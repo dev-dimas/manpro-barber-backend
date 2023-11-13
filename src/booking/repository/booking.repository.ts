@@ -40,9 +40,10 @@ export class BookingRepository {
     createBookingDto: CreateBookingDto,
     endTime: any,
     userId: string = null,
+    barberman: number,
     id: string,
   ) {
-    return await this.repository.save({
+    return await this.repository.insert({
       id,
       name: createBookingDto.name,
       email: createBookingDto.email,
@@ -50,8 +51,11 @@ export class BookingRepository {
       date: createBookingDto.date,
       startTime: createBookingDto.startTime,
       endTime,
-      userId,
-      serviceId: createBookingDto.service,
+      barberman,
+      user: {
+        id: userId,
+      },
+      service: { id: createBookingDto.service },
     });
   }
 }

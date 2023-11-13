@@ -41,11 +41,13 @@ export class BookingService {
     if (numberOfBooking >= employeeInCharge)
       return { statusCode: HttpStatus.CONFLICT, message: 'full' };
 
+    const barberman = 1 + numberOfBooking;
     const booking = await this.bookingRepository.addBooking(
       createBookingDto,
       endTime,
       user?.id,
-      dayjs().toISOString(),
+      barberman,
+      Date.now().toString(),
     );
 
     return { statusCode: HttpStatus.CREATED, data: booking };

@@ -2,7 +2,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppModule } from '../../app.module';
 import { EmployeeEntity } from '../entities/employee.entity';
-import { EmployeeTableTestHelper } from '../helper/employee.table.test.helper';
+import { EmployeeTableTestHelper } from '../../../helper/employee.table.test.helper';
 import { EmployeeRepository } from './employee.repository';
 import { EmployeeRoleType, GenderType } from '../../enum';
 

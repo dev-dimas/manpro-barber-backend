@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ServiceTableTestHelper } from '../helper/service.table.helper';
+import { ServiceTableTestHelper } from '../../../helper/service.table.helper';
 import { ServiceRepository } from './service.repository';
 import { AppModule } from '../../app.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -40,7 +40,7 @@ describe('ServiceRepository', () => {
       };
 
       // Action
-      await serviceRepository.addService(service, '123');
+      await serviceRepository.addService(service);
     });
   });
 });

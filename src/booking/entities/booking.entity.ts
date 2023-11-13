@@ -39,6 +39,9 @@ export class BookingEntity {
   })
   endTime: string;
 
+  @Column()
+  barberman: number;
+
   @Column({
     type: 'enum',
     enum: BookingStatus,
