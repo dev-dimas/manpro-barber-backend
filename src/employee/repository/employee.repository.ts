@@ -3,6 +3,7 @@ import { EmployeeEntity } from '../entities/employee.entity';
 import { CreateEmployeeDto, UpdateEmployeeDto } from '../dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EmployeeRoleType } from '../../enum';
 
 @Injectable()
 export class EmployeeRepository {
@@ -42,6 +43,15 @@ export class EmployeeRepository {
   async deleteEmployeeById(id: string) {
     return await this.repository.delete({
       id,
+    });
+  }
+
+  async countEmployeeInCharge() {
+    return await this.repository.count({
+      where: {
+        isIncharge: true,
+        role: EmployeeRoleType.ADMIN,
+      },
     });
   }
 }

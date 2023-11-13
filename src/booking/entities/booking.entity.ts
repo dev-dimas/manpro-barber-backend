@@ -18,13 +18,13 @@ export class BookingEntity {
   id: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  email: string;
+  email!: string;
 
   @Column()
-  noTlp: string;
+  noTlp!: string;
 
   @Column()
   date: Date;
@@ -38,6 +38,9 @@ export class BookingEntity {
     type: 'time',
   })
   endTime: string;
+
+  @Column()
+  barberman: number;
 
   @Column({
     type: 'enum',

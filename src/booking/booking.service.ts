@@ -3,21 +3,26 @@ import { CreateBookingDto } from './dto';
 import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingRepository } from './repository/booking.repository';
+import { EmployeeRepository } from '../employee/repository/employee.repository';
 
 @Injectable()
 export class BookingService {
   constructor(
     private readonly bookingRepository: BookingRepository,
     private readonly serviceRepository: ServiceRepository,
+    private readonly employeeRepository: EmployeeRepository,
   ) {}
 
-  async addBooking(createBookingDto: CreateBookingDto) {
-    let endTime = dayjs(
-      `${createBookingDto.date} ${createBookingDto.startTime}`,
-    );
-
+  async addBooking(createBookingDto: CreateBookingDto, user: any) {
     const service = await this.serviceRepository.getServiceById(
       createBookingDto.service,
+    );
+
+    const employeeInCharge =
+      await this.employeeRepository.countEmployeeInCharge();
+
+    let endTime = dayjs(
+      `${createBookingDto.date} ${createBookingDto.startTime}`,
     );
 
     const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
@@ -33,8 +38,18 @@ export class BookingService {
         createBookingDto.date,
       );
 
-    if (numberOfBooking >= 3)
+    if (numberOfBooking >= employeeInCharge)
       return { statusCode: HttpStatus.CONFLICT, message: 'full' };
-    return { statusCode: HttpStatus.CREATED };
+
+    const barberman = 1 + numberOfBooking;
+    const booking = await this.bookingRepository.addBooking(
+      createBookingDto,
+      endTime,
+      user?.id,
+      barberman,
+      Date.now().toString(),
+    );
+
+    return { statusCode: HttpStatus.CREATED, data: booking };
   }
 }

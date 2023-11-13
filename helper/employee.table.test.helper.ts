@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeEntity } from '../entities/employee.entity';
-import { EmployeeRoleType, GenderType } from '../../enum';
+import { EmployeeEntity } from '../src/employee/entities/employee.entity';
+import { EmployeeRoleType, GenderType } from '../src/enum';
 
 @Injectable()
 export class EmployeeTableTestHelper {

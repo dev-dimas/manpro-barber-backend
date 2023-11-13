@@ -23,8 +23,8 @@ export class ServiceEntity {
   @Column({ type: 'time' })
   duration: string;
 
-  @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
-  employee: EmployeeEntity;
+  // @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
+  // employee: EmployeeEntity;
 
   @CreateDateColumn()
   createdAt: Date;

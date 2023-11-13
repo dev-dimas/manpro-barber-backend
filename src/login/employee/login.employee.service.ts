@@ -31,7 +31,7 @@ export class LoginEmployeeService {
 
     delete employee.password;
     const accessToken = await this.jwtService.signAsync({
-      sub: employee.id,
+      sub: { ...employee },
       role: employee.role,
     });
     return { statusCode: HttpStatus.OK, accessToken };
