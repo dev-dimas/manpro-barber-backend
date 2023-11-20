@@ -162,13 +162,11 @@ describe('BookingRepository', () => {
 
       const newService = await serviceTableTestHelper.addService(service);
 
-      const date = new Date('2023-10-09');
-
       const bookingDto = {
         name: 'rudi',
         email: 'rudi@gmail.com',
         noTlp: '18129210231',
-        date,
+        date: '2023-10-09',
         startTime: '08:00',
         service: newService.id,
       };
@@ -176,33 +174,32 @@ describe('BookingRepository', () => {
       const userId = newUser.id;
       const endTime = '08:40';
       const idBooking = Date.now().toString();
+      const barberman = 1;
 
       // Action
-      await bookingRepository.addBooking(
+      const res = await bookingRepository.addBooking(
         bookingDto,
         endTime,
         userId,
-        1,
+        barberman,
         idBooking,
       );
 
       // Assert
       const allBooking = await bookingTableTestHelper.getAllBooking();
-      const newBooking = await bookingTableTestHelper.findBookingById(
-        idBooking,
-      );
 
       expect(allBooking).toHaveLength(1);
-      expect(newBooking[0]).toMatchObject({
+      expect(res.raw[0]).toMatchObject({
         id: idBooking,
         name: bookingDto.name,
         email: bookingDto.email,
         noTlp: bookingDto.noTlp,
-        date: bookingDto.date,
+        date: dayjs(bookingDto.date).toDate(),
         startTime: `${bookingDto.startTime}:00`,
         endTime: `${endTime}:00`,
-        user: userId,
-        service: bookingDto.service,
+        barberman,
+        userId: userId,
+        serviceId: bookingDto.service,
       });
     });
   });
