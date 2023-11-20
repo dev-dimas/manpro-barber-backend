@@ -43,19 +43,25 @@ export class BookingRepository {
     barberman: number,
     id: string,
   ) {
-    return await this.repository.insert({
-      id,
-      name: createBookingDto.name,
-      email: createBookingDto.email,
-      noTlp: createBookingDto.noTlp,
-      date: createBookingDto.date,
-      startTime: createBookingDto.startTime,
-      endTime,
-      barberman,
-      user: {
-        id: userId,
-      },
-      service: { id: createBookingDto.service },
-    });
+    return await this.repository
+      .createQueryBuilder()
+      .insert()
+      .into(BookingEntity)
+      .values({
+        id,
+        name: createBookingDto.name,
+        email: createBookingDto.email,
+        noTlp: createBookingDto.noTlp,
+        date: createBookingDto.date,
+        startTime: createBookingDto.startTime,
+        endTime,
+        barberman,
+        user: {
+          id: userId,
+        },
+        service: { id: createBookingDto.service },
+      })
+      .returning('*')
+      .execute();
   }
 }

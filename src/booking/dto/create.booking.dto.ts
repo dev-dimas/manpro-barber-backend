@@ -35,7 +35,7 @@ export class CreateBookingDto {
   @ApiProperty({
     default: '2023-10-09',
   })
-  date: Date;
+  date: string;
 
   @IsNotEmpty()
   @IsMilitaryTime()
