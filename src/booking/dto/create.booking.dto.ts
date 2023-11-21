@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsArray,
   IsDateString,
   IsEmail,
   IsMilitaryTime,
   IsNotEmpty,
   IsString,
+  IsUUID,
 } from 'class-validator';
 
 export class CreateBookingDto {
@@ -35,7 +35,7 @@ export class CreateBookingDto {
   @ApiProperty({
     default: '2023-10-09',
   })
-  date: Date;
+  date: string;
 
   @IsNotEmpty()
   @IsMilitaryTime()
@@ -45,9 +45,10 @@ export class CreateBookingDto {
   startTime: string;
 
   @IsNotEmpty()
-  @IsArray()
+  @IsUUID('all')
+  @IsString()
   @ApiProperty({
-    default: ['serviceId'],
+    default: 'serviceId',
   })
-  service: Array<string>;
+  service: string;
 }

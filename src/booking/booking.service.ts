@@ -1,39 +1,57 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { BookingRepository } from './repository';
 import { CreateBookingDto } from './dto';
 import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
+import { BookingRepository } from './repository/booking.repository';
+import { EmployeeRepository } from '../employee/repository/employee.repository';
 
 @Injectable()
 export class BookingService {
   constructor(
     private readonly bookingRepository: BookingRepository,
     private readonly serviceRepository: ServiceRepository,
+    private readonly employeeRepository: EmployeeRepository,
   ) {}
 
-  async addBooking(createBookingDto: CreateBookingDto) {
+  async addBooking(createBookingDto: CreateBookingDto, user: any) {
+    const id = Date.now().toString();
+
+    const service = await this.serviceRepository.getServiceById(
+      createBookingDto.service,
+    );
+
+    const employeeInCharge =
+      await this.employeeRepository.countEmployeeInCharge();
+
     let endTime = dayjs(
       `${createBookingDto.date} ${createBookingDto.startTime}`,
     );
-    for (let i = 0; i < createBookingDto.service.length; i++) {
-      const service = await this.serviceRepository.getServiceById(
-        createBookingDto.service[i],
-      );
-      const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
-      endTime = endTime
-        .add(Number(duration.format('H')), 'h')
-        .add(Number(duration.format('m')), 'm');
-    }
+
+    const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
+
+    endTime = endTime
+      .add(Number(duration.format('H')), 'h')
+      .add(Number(duration.format('m')), 'm');
 
     const numberOfBooking =
-      this.bookingRepository.getBookingByRangeStartEndTime(
+      await this.bookingRepository.countBookingByRangeStartEndTime(
         createBookingDto.startTime,
         endTime.format('HH:mm'),
-        createBookingDto.date,
+        dayjs(createBookingDto.date).toDate(),
       );
 
-    console.log(createBookingDto.date);
-    console.log(numberOfBooking);
-    return { statusCode: HttpStatus.CREATED };
+    if (numberOfBooking >= employeeInCharge)
+      return { statusCode: HttpStatus.CONFLICT, message: 'full' };
+
+    const barberman = 1 + numberOfBooking;
+    const newBooking = await this.bookingRepository.addBooking(
+      createBookingDto,
+      endTime,
+      user?.id,
+      barberman,
+      id,
+    );
+
+    return { statusCode: HttpStatus.CREATED, data: newBooking.raw[0] };
   }
 }

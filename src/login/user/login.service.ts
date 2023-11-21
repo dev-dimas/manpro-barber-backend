@@ -29,7 +29,7 @@ export class LoginService {
 
     delete user.password;
     const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
+      sub: { ...user },
       role: 'user',
     });
     return { statusCode: HttpStatus.OK, accessToken };

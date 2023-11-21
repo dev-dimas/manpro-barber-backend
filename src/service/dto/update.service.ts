@@ -22,9 +22,4 @@ export class UpdateServiceDto {
     default: '00:40',
   })
   duration: string;
-
-  @IsOptional()
-  @IsString()
-  @IsUUID('all')
-  employee: any;
 }

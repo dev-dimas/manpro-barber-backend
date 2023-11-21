@@ -19,8 +19,10 @@ export class ServiceService {
     const employee = await this.employeeRepository.getEmployeeById(user.sub);
     if (!employee)
       throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
-    createServiceDto.employee = user.sub;
-    const service = await this.serviceRepository.addService(createServiceDto);
+    const service = await this.serviceRepository.addService(
+      createServiceDto,
+      // user.sub,
+    );
     return { statusCode: HttpStatus.CREATED, data: service };
   }
 
@@ -29,7 +31,7 @@ export class ServiceService {
     updateServiceDto: UpdateServiceDto,
     user: any,
   ) {
-    updateServiceDto.employee = user.sub;
+    const employee = user.sub;
     const service = await this.serviceRepository.updateServiceById(
       id,
       updateServiceDto,

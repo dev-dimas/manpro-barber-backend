@@ -20,9 +20,9 @@ export class UserRepository {
   }
 
   async getUserById(id: string) {
-    return await this.repository.query('Select * From users Where id = $1', [
+    return await this.repository.findOneBy({
       id,
-    ]);
+    });
   }
 
   async getUserByUsername(username: string) {
