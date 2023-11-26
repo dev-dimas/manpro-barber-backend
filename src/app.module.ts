@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { LoginModule } from './login/user/login.module';
+import { LoginModule } from './login/login.module';
 import { EmployeeModule } from './employee/employee.module';
-import { LoginEmployeeModule } from './login/employee/login.employee.module';
 import { ServiceModule } from './service/service.module';
 import { BarberModule } from './barber/barber.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
@@ -42,7 +41,6 @@ import { BookingModule } from './booking/booking.module';
     LoginModule,
     UserModule,
     EmployeeModule,
-    LoginEmployeeModule,
     ServiceModule,
     BarberModule,
     SeederModule,
