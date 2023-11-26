@@ -31,6 +31,12 @@ export class UserRepository {
     });
   }
 
+  async getUserByEmail(email: string) {
+    return await this.repository.findOneBy({
+      email,
+    });
+  }
+
   async updateUserById(id: string, user: UpdateUserDto) {
     return await this.repository
       .createQueryBuilder()
