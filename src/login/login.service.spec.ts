@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LoginService } from './login.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserRepository } from '../../user/repository/user.repository';
+import { UserRepository } from '../user/repository/user.repository';
+import { EmployeeRepository } from '../employee/repository/employee.repository';
 
 describe('LoginService', () => {
   let service: LoginService;
@@ -16,6 +17,12 @@ describe('LoginService', () => {
           provide: UserRepository,
           useValue: {
             getUserByUsername: jest.fn(),
+          },
+        },
+        {
+          provide: EmployeeRepository,
+          useValue: {
+            getEmployeeByEmail: jest.fn(),
           },
         },
       ],

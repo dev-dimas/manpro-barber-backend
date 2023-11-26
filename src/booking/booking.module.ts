@@ -2,20 +2,23 @@ import { Module } from '@nestjs/common';
 import { BookingController } from './booking.controller';
 import { BookingService } from './booking.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BookingEntity, DetailBookingEntity } from './entities';
-import { BookingRepository, DetailBookingRepository } from './repository';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { ServiceEntity } from '../service/entities/service.entity';
+import { BookingRepository } from './repository/booking.repository';
+import { BookingEntity } from './entities/booking.entity';
+import { EmployeeRepository } from '../employee/repository/employee.repository';
+import { EmployeeEntity } from '../employee/entities/employee.entity';
 
 @Module({
   controllers: [BookingController],
-  providers: [BookingService, BookingRepository, ServiceRepository],
+  providers: [
+    BookingService,
+    BookingRepository,
+    ServiceRepository,
+    EmployeeRepository,
+  ],
   imports: [
-    TypeOrmModule.forFeature([
-      BookingEntity,
-      DetailBookingEntity,
-      ServiceEntity,
-    ]),
+    TypeOrmModule.forFeature([BookingEntity, ServiceEntity, EmployeeEntity]),
   ],
   exports: [BookingService, BookingRepository],
 })

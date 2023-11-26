@@ -2,7 +2,7 @@ import { TestingModule, Test } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppModule } from '../../app.module';
 import { UserEntity } from '../entities/user.entity';
-import { UserTableTestHelper } from '../helper/user.table.test.helper';
+import { UserTableTestHelper } from '../../../helper/user.table.test.helper';
 import { UserRepository } from './user.repository';
 
 describe('UserRepository', () => {
