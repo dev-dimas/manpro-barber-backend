@@ -11,7 +11,6 @@ export class UserTableTestHelper {
   ) {}
 
   async addUser({
-    username = 'andi123',
     password = 'andi123',
     email = 'andi123@gmail.com',
     name = 'andi',
@@ -21,7 +20,6 @@ export class UserTableTestHelper {
     isActive = true,
   }) {
     return await this.repository.save({
-      username,
       password,
       email,
       name,

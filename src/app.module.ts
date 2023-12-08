@@ -12,6 +12,10 @@ import { JwtService } from '@nestjs/jwt';
 import { RolesGuard } from './guard/role.guard';
 import { SeederModule } from './seeder/seeder.module';
 import { BookingModule } from './booking/booking.module';
+import { PasswordController } from './password/password.controller';
+import { PasswordService } from './password/password.service';
+import { PasswordModule } from './password/password.module';
+import { AvatarController } from './avatar/avatar.controller';
 
 @Module({
   providers: [
@@ -45,6 +49,8 @@ import { BookingModule } from './booking/booking.module';
     BarberModule,
     SeederModule,
     BookingModule,
+    PasswordModule,
   ],
+  controllers: [AvatarController],
 })
 export class AppModule {}
