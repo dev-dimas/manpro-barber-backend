@@ -145,7 +145,6 @@ describe('BookingRepository', () => {
     it('should add booking to database and return correctly', async () => {
       // Arrange
       const user = {
-        username: 'andi123',
         password: 'andi123',
         email: 'andi123@gmail.com',
         name: 'andi',

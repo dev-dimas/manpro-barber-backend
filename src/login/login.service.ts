@@ -36,7 +36,7 @@ export class LoginService {
           { sub: { ...user }, role: 'user' },
           { expiresIn: '1 days' },
         );
-    return { statusCode: HttpStatus.OK, accessToken };
+    return { statusCode: HttpStatus.OK, data: { accessToken } };
   }
 
   async employeeGetLogged(employeeLoginDto: EmployeeLoginDto) {
@@ -63,6 +63,6 @@ export class LoginService {
       sub: { ...employee },
       role: employee.role,
     });
-    return { statusCode: HttpStatus.OK, accessToken };
+    return { statusCode: HttpStatus.OK, data: { accessToken } };
   }
 }
