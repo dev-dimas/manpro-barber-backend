@@ -1,11 +1,9 @@
 import { IsBoolean } from 'class-validator';
 import { GenderType, EmployeeRoleType } from '../../enum';
-import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -46,9 +44,6 @@ export class EmployeeEntity {
   })
   @IsBoolean()
   isIncharge: boolean;
-
-  // @OneToMany(() => ServiceEntity, (service) => service.employee)
-  // services: ServiceEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

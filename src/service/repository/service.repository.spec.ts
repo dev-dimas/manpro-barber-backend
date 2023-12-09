@@ -37,6 +37,7 @@ describe('ServiceRepository', () => {
         name: 'potong',
         price: 20000,
         duration: '00:40:00',
+        information: null,
       };
 
       // Action
@@ -46,6 +47,44 @@ describe('ServiceRepository', () => {
       const services = await serviceTableTestHelper.getAllService();
       expect(services).toHaveLength(1);
       expect(newServices).toMatchObject(service);
+    });
+  });
+
+  describe('function addManyService', () => {
+    it('should add data many to database and retrun correctly', async () => {
+      // Arrange
+      const service1 = {
+        name: 'potong',
+        price: 20000,
+        duration: '00:40:00',
+        information: null,
+      };
+
+      const service2 = {
+        name: 'potong2',
+        price: 20000,
+        duration: '00:40:00',
+        information: null,
+      };
+
+      const service3 = {
+        name: 'potong3',
+        price: 20000,
+        duration: '00:40:00',
+        information: null,
+      };
+
+      // Action
+      const newServices = await serviceRepository.addManyService([
+        service1,
+        service2,
+        service3,
+      ]);
+
+      // Assert
+      const services = await serviceTableTestHelper.getAllService();
+      expect(services).toHaveLength(3);
+      expect(newServices.raw).toMatchObject([service1, service2, service3]);
     });
   });
 
