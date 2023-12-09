@@ -50,7 +50,7 @@ export class EmployeeRepository {
     return await this.repository.count({
       where: {
         isIncharge: true,
-        role: EmployeeRoleType.ADMIN,
+        role: EmployeeRoleType.BARBERMAN,
       },
     });
   }

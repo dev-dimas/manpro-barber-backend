@@ -37,7 +37,7 @@ describe('EmployeeRepository', () => {
       const employee = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -59,7 +59,7 @@ describe('EmployeeRepository', () => {
       const employee1 = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -68,7 +68,7 @@ describe('EmployeeRepository', () => {
       const employee2 = {
         name: 'ando',
         email: 'ando@gmail.com',
-        noTlp: '28291212922',
+        phone: '28291212922',
         password: 'ando12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -92,7 +92,7 @@ describe('EmployeeRepository', () => {
       const employee1 = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -101,7 +101,7 @@ describe('EmployeeRepository', () => {
       const employee2 = {
         name: 'ando',
         email: 'ando@gmail.com',
-        noTlp: '28291212922',
+        phone: '28291212922',
         password: 'ando12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -126,7 +126,7 @@ describe('EmployeeRepository', () => {
       const employee1 = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -135,7 +135,7 @@ describe('EmployeeRepository', () => {
       const employee2 = {
         name: 'ando',
         email: 'ando@gmail.com',
-        noTlp: '28291212922',
+        phone: '28291212922',
         password: 'ando12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -158,7 +158,7 @@ describe('EmployeeRepository', () => {
       const employee = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -167,7 +167,7 @@ describe('EmployeeRepository', () => {
       const updateEmployee = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -193,7 +193,7 @@ describe('EmployeeRepository', () => {
       const employee1 = {
         name: 'andi',
         email: 'andi@gmail.com',
-        noTlp: '18129210231',
+        phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -202,7 +202,7 @@ describe('EmployeeRepository', () => {
       const employee2 = {
         name: 'ando',
         email: 'ando@gmail.com',
-        noTlp: '28291212922',
+        phone: '28291212922',
         password: 'ando12345',
         gender: GenderType.L,
         role: EmployeeRoleType.ADMIN,
@@ -228,54 +228,62 @@ describe('EmployeeRepository', () => {
     it('should count employee incharge and return correctly', async () => {
       // Arrange
       const employee1 = {
-        name: 'andi',
-        email: 'andi@gmail.com',
-        noTlp: '18129210231',
-        password: 'andi12345',
+        name: 'Denny',
+        phone: '085789023456',
         gender: GenderType.L,
-        role: EmployeeRoleType.ADMIN,
-        isIncharge: true,
+        role: EmployeeRoleType.BARBERMAN,
+        email: 'denny@gmail.com',
+        password: 'denny123',
       };
 
       const employee2 = {
-        name: 'ando',
-        email: 'ando@gmail.com',
-        noTlp: '28291212922',
-        password: 'ando12345',
+        name: 'Fathola',
+        phone: '085789023457',
         gender: GenderType.L,
-        role: EmployeeRoleType.ADMIN,
-        isIncharge: true,
+        role: EmployeeRoleType.BARBERMAN,
+        email: 'fathola@gmail.com',
+        password: 'fathola123',
       };
 
       const employee3 = {
-        name: 'andu',
-        email: 'andu@gmail.com',
-        noTlp: '00029210231',
-        password: 'andi12345',
+        name: 'Helos',
+        phone: '085789023458',
         gender: GenderType.L,
-        role: EmployeeRoleType.ADMIN,
-        isIncharge: false,
+        role: EmployeeRoleType.BARBERMAN,
+        email: 'helos@gmail.com',
+        password: 'helos123',
       };
 
       const employee4 = {
         name: 'doni',
         email: 'doni@gmail.com',
-        noTlp: '11129210231',
+        phone: '11129210231',
         password: 'doni12345',
         gender: GenderType.L,
         role: EmployeeRoleType.OWNER,
+      };
+
+      const employee5 = {
+        name: 'dito',
+        email: 'dito@gmail.com',
+        phone: '11129210231',
+        password: 'dito12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.OWNER,
+        isIncharge: false,
       };
 
       await employeeTableTestHelper.addEmployee(employee1);
       await employeeTableTestHelper.addEmployee(employee2);
       await employeeTableTestHelper.addEmployee(employee3);
       await employeeTableTestHelper.addEmployee(employee4);
+      await employeeTableTestHelper.addEmployee(employee5);
 
       // Action
       const res = await employeeRepository.countEmployeeInCharge();
 
       // Assert
-      expect(res).toEqual(2);
+      expect(res).toEqual(3);
     });
   });
 });

@@ -1,4 +1,5 @@
 .env
+/avatar
 
 # compiled output
 /dist

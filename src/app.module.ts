@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { LoginModule } from './login/user/login.module';
+import { LoginModule } from './login/login.module';
 import { EmployeeModule } from './employee/employee.module';
-import { LoginEmployeeModule } from './login/employee/login.employee.module';
 import { ServiceModule } from './service/service.module';
 import { BarberModule } from './barber/barber.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
@@ -13,6 +12,10 @@ import { JwtService } from '@nestjs/jwt';
 import { RolesGuard } from './guard/role.guard';
 import { SeederModule } from './seeder/seeder.module';
 import { BookingModule } from './booking/booking.module';
+import { PasswordController } from './password/password.controller';
+import { PasswordService } from './password/password.service';
+import { PasswordModule } from './password/password.module';
+import { AvatarController } from './avatar/avatar.controller';
 
 @Module({
   providers: [
@@ -42,11 +45,12 @@ import { BookingModule } from './booking/booking.module';
     LoginModule,
     UserModule,
     EmployeeModule,
-    LoginEmployeeModule,
     ServiceModule,
     BarberModule,
     SeederModule,
     BookingModule,
+    PasswordModule,
   ],
+  controllers: [AvatarController],
 })
 export class AppModule {}

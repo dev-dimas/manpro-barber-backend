@@ -14,6 +14,8 @@ export class BookingService {
   ) {}
 
   async addBooking(createBookingDto: CreateBookingDto, user: any) {
+    const id = Date.now().toString();
+
     const service = await this.serviceRepository.getServiceById(
       createBookingDto.service,
     );
@@ -35,21 +37,21 @@ export class BookingService {
       await this.bookingRepository.countBookingByRangeStartEndTime(
         createBookingDto.startTime,
         endTime.format('HH:mm'),
-        createBookingDto.date,
+        dayjs(createBookingDto.date).toDate(),
       );
 
     if (numberOfBooking >= employeeInCharge)
       return { statusCode: HttpStatus.CONFLICT, message: 'full' };
 
     const barberman = 1 + numberOfBooking;
-    const booking = await this.bookingRepository.addBooking(
+    const newBooking = await this.bookingRepository.addBooking(
       createBookingDto,
       endTime,
       user?.id,
       barberman,
-      Date.now().toString(),
+      id,
     );
 
-    return { statusCode: HttpStatus.CREATED, data: booking };
+    return { statusCode: HttpStatus.CREATED, data: newBooking.raw[0] };
   }
 }

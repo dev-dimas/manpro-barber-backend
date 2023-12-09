@@ -111,7 +111,6 @@ describe('ServiceRepository', () => {
       const res = await serviceRepository.getServiceById(services[0].id);
 
       // Assert
-      console.log(res);
       expect(res).toMatchObject(service1);
     });
   });

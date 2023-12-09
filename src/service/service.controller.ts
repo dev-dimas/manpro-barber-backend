@@ -24,7 +24,7 @@ export class ServiceController {
     return this.serviceService.getAllService();
   }
 
-  @Roles(Role.ADMIN, Role.OWNER)
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Post()
   createService(
     @Body() createServiceDto: CreateServiceDto,
@@ -33,7 +33,7 @@ export class ServiceController {
     return this.serviceService.createService(createServiceDto, req.user);
   }
 
-  @Roles(Role.ADMIN, Role.OWNER)
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Patch(':service')
   updateService(
     @Param('service') id: string,

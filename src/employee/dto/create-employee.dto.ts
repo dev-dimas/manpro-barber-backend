@@ -30,7 +30,7 @@ export class CreateEmployeeDto {
   @ApiProperty({
     default: '019302392839',
   })
-  noTlp: string;
+  phone: string;
 
   @IsNotEmpty()
   @IsString()
