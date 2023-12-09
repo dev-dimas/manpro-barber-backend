@@ -57,7 +57,6 @@ export class LoginService {
       throw new HttpException('Invalid credentials!.', HttpStatus.UNAUTHORIZED);
     }
 
-    console.log(employee);
     delete employee.password;
     const accessToken = await this.jwtService.signAsync({
       sub: { ...employee },

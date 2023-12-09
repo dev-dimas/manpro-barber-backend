@@ -14,7 +14,7 @@ export class EmployeeTableTestHelper {
   async addEmployee({
     name = 'andi',
     email = 'andi@gmail.com',
-    noTlp = '18129210231',
+    phone = '18129210231',
     password = 'andi12345',
     gender = GenderType.L,
     role = EmployeeRoleType.ADMIN,
@@ -23,7 +23,7 @@ export class EmployeeTableTestHelper {
     return await this.repository.save({
       name,
       email,
-      noTlp,
+      phone,
       password,
       gender,
       role,
