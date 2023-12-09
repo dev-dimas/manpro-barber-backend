@@ -25,7 +25,7 @@ export class EmployeeEntity {
   password: string;
 
   @Column()
-  noTlp: string;
+  phone: string;
 
   @Column({
     type: 'enum',

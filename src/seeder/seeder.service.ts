@@ -8,17 +8,37 @@ export class SeederService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
   async createSeeder() {
-    const password = await argon2.hash('andi123');
+    const password1 = await argon2.hash('denny123');
+    const password2 = await argon2.hash('fathola123');
+    const password3 = await argon2.hash('helos123');
 
-    const employee = await this.employeeRepository.addEmployee({
-      name: 'Andi',
-      noTlp: '013298039',
+    await this.employeeRepository.addEmployee({
+      name: 'Denny',
+      phone: '085789023456',
       gender: GenderType.L,
-      role: EmployeeRoleType.OWNER,
-      email: 'andi@gmail.com',
-      password: password,
+      role: EmployeeRoleType.BARBERMAN,
+      email: 'denny@gmail.com',
+      password: password1,
     });
 
-    return { statusCode: HttpStatus.CREATED, data: { employee } };
+    await this.employeeRepository.addEmployee({
+      name: 'Fathola',
+      phone: '085789023457',
+      gender: GenderType.L,
+      role: EmployeeRoleType.BARBERMAN,
+      email: 'fathola@gmail.com',
+      password: password2,
+    });
+
+    await this.employeeRepository.addEmployee({
+      name: 'Helos',
+      phone: '085789023458',
+      gender: GenderType.L,
+      role: EmployeeRoleType.BARBERMAN,
+      email: 'helos@gmail.com',
+      password: password3,
+    });
+
+    return { statusCode: HttpStatus.CREATED };
   }
 }

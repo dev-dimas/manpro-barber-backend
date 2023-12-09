@@ -36,7 +36,7 @@ export class UpdateEmployeeDto {
   @ApiProperty({
     default: '019302392839',
   })
-  noTlp: string;
+  phone: string;
 
   @IsOptional()
   @IsString()
