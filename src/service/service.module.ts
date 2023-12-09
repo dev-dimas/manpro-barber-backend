@@ -4,8 +4,8 @@ import { ServiceService } from './service.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServiceEntity } from './entities/service.entity';
 import { ServiceRepository } from './repository/service.repository';
-import { EmployeeRepository } from '../employee/repository/employee.repository';
 import { EmployeeEntity } from '../employee/entities/employee.entity';
+import { EmployeeRepository } from '../employee/repository/employee.repository';
 
 @Module({
   controllers: [ServiceController],

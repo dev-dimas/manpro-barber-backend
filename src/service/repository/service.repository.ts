@@ -12,11 +12,17 @@ export class ServiceRepository {
   ) {}
 
   async addService(service: CreateServiceDto) {
-    return await this.repository.save({
-      name: service.name,
-      price: service.price,
-      duration: service.duration,
-    });
+    return await this.repository.save(service);
+  }
+
+  async addManyService(service: any) {
+    return await this.repository
+      .createQueryBuilder()
+      .insert()
+      .into(ServiceEntity)
+      .values(service)
+      .returning('*')
+      .execute();
   }
 
   async getAllService() {

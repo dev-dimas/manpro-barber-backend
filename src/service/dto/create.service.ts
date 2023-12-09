@@ -3,6 +3,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsMilitaryTime,
+  IsOptional,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -28,4 +29,11 @@ export class CreateServiceDto {
     default: '00:40',
   })
   duration: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty({
+    default: 'information',
+  })
+  information: string | null;
 }

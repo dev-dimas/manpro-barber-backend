@@ -1,10 +1,7 @@
-import { EmployeeEntity } from '../../employee/entities/employee.entity';
-
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,8 +20,10 @@ export class ServiceEntity {
   @Column({ type: 'time' })
   duration: string;
 
-  // @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
-  // employee: EmployeeEntity;
+  @Column({
+    default: null,
+  })
+  information: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
