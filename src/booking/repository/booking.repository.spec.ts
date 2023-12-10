@@ -3,31 +3,40 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppModule } from '../../app.module';
 import { BookingTableTestHelper } from '../../../helper/booking.table.test.helper';
 import { BookingRepository } from './booking.repository';
-import { BookingStatus } from '../../enum';
+import { BookingStatus, EmployeeRoleType, GenderType } from '../../enum';
 import dayjs from 'dayjs';
 import { BookingEntity } from '../entities/booking.entity';
 import { UserEntity } from '../../user/entities/user.entity';
 import { ServiceEntity } from '../../service/entities/service.entity';
 import { UserTableTestHelper } from '../../../helper/user.table.test.helper';
 import { ServiceTableTestHelper } from '../../../helper/service.table.helper';
+import { EmployeeTableTestHelper } from '../../../helper/employee.table.test.helper';
+import { EmployeeEntity } from '../../employee/entities/employee.entity';
 
 describe('BookingRepository', () => {
   let bookingRepository: BookingRepository;
   let bookingTableTestHelper: BookingTableTestHelper;
   let userTableTestHelper: UserTableTestHelper;
   let serviceTableTestHelper: ServiceTableTestHelper;
+  let employeeTableTestHelper: EmployeeTableTestHelper;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         AppModule,
-        TypeOrmModule.forFeature([BookingEntity, UserEntity, ServiceEntity]),
+        TypeOrmModule.forFeature([
+          BookingEntity,
+          UserEntity,
+          ServiceEntity,
+          EmployeeEntity,
+        ]),
       ],
       providers: [
         BookingRepository,
         BookingTableTestHelper,
         UserTableTestHelper,
         ServiceTableTestHelper,
+        EmployeeTableTestHelper,
       ],
     }).compile();
 
@@ -39,19 +48,20 @@ describe('BookingRepository', () => {
     serviceTableTestHelper = module.get<ServiceTableTestHelper>(
       ServiceTableTestHelper,
     );
+    employeeTableTestHelper = module.get<EmployeeTableTestHelper>(
+      EmployeeTableTestHelper,
+    );
   });
 
   afterEach(async () => {
     await bookingTableTestHelper.cleanTable();
     await userTableTestHelper.cleanTable();
     await serviceTableTestHelper.cleanTable();
+    await employeeTableTestHelper.cleanTable();
   });
 
   it('should be defined', () => {
     expect(bookingRepository).toBeDefined();
-    expect(bookingTableTestHelper).toBeDefined();
-    expect(userTableTestHelper).toBeDefined();
-    expect(serviceTableTestHelper).toBeDefined();
   });
 
   describe('function countBookingByRangeStartEndTime', () => {
@@ -107,13 +117,22 @@ describe('BookingRepository', () => {
         status: BookingStatus.BOOKING,
       };
 
-      // booking status served
+      // booking status pandding
       const booking6 = {
         id: 'booking-128',
         date: date,
         startTime: '08:30',
         endTime: '09:10',
-        status: BookingStatus.SERVED,
+        status: BookingStatus.PANDING,
+      };
+
+      // true
+      const booking7 = {
+        id: 'booking-129',
+        date: date,
+        startTime: '09:30',
+        endTime: '10:10',
+        status: BookingStatus.BOOKING,
       };
 
       await bookingTableTestHelper.addBooking(booking1);
@@ -122,6 +141,7 @@ describe('BookingRepository', () => {
       await bookingTableTestHelper.addBooking(booking4);
       await bookingTableTestHelper.addBooking(booking5);
       await bookingTableTestHelper.addBooking(booking6);
+      await bookingTableTestHelper.addBooking(booking7);
 
       // Action
       const res = await bookingRepository.countBookingByRangeStartEndTime(
@@ -141,7 +161,7 @@ describe('BookingRepository', () => {
     });
   });
 
-  describe('addBooking', () => {
+  describe('userAddBooking', () => {
     it('should add booking to database and return correctly', async () => {
       // Arrange
       const user = {
@@ -161,25 +181,24 @@ describe('BookingRepository', () => {
 
       const newService = await serviceTableTestHelper.addService(service);
 
-      const bookingDto = {
-        name: 'rudi',
-        email: 'rudi@gmail.com',
-        noTlp: '18129210231',
-        date: '2023-10-09',
-        startTime: '08:00',
-        service: newService.id,
-      };
-
       const userId = newUser.id;
       const endTime = '08:40';
       const idBooking = Date.now().toString();
       const barberman = 1;
 
+      const bookingDto = {
+        name: 'rudi',
+        phone: '098765435778',
+        date: '2023-10-09',
+        startTime: '08:00',
+        serviceId: newService.id,
+        userId,
+      };
+
       // Action
-      const res = await bookingRepository.addBooking(
+      const res = await bookingRepository.userAddBooking(
         bookingDto,
         endTime,
-        userId,
         barberman,
         idBooking,
       );
@@ -191,14 +210,73 @@ describe('BookingRepository', () => {
       expect(res.raw[0]).toMatchObject({
         id: idBooking,
         name: bookingDto.name,
-        email: bookingDto.email,
-        noTlp: bookingDto.noTlp,
         date: dayjs(bookingDto.date).toDate(),
         startTime: `${bookingDto.startTime}:00`,
         endTime: `${endTime}:00`,
         barberman,
         userId: userId,
-        serviceId: bookingDto.service,
+        serviceId: bookingDto.serviceId,
+      });
+    });
+  });
+
+  describe('employeeAddBooking', () => {
+    it('should add booking to database and return correctly', async () => {
+      // Arrange
+      const employee = {
+        name: 'andi',
+        email: 'andi@gmail.com',
+        phone: '18129210231',
+        password: 'andi12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.BARBERMAN,
+      };
+
+      const newEmployee = await employeeTableTestHelper.addEmployee(employee);
+
+      const service = {
+        name: 'potong',
+        price: 20000,
+        duration: '00:40',
+      };
+
+      const newService = await serviceTableTestHelper.addService(service);
+
+      const employeeId = newEmployee.id;
+      const endTime = '08:40';
+      const idBooking = Date.now().toString();
+      const barberman = 1;
+
+      const bookingDto = {
+        name: 'rudi',
+        phone: '098765435778',
+        date: '2023-10-09',
+        startTime: '08:00',
+        serviceId: newService.id,
+        employeeId,
+      };
+
+      // Action
+      const res = await bookingRepository.employeeAddBooking(
+        bookingDto,
+        endTime,
+        barberman,
+        idBooking,
+      );
+
+      // Assert
+      const allBooking = await bookingTableTestHelper.getAllBooking();
+
+      expect(allBooking).toHaveLength(1);
+      expect(res.raw[0]).toMatchObject({
+        id: idBooking,
+        name: bookingDto.name,
+        date: dayjs(bookingDto.date).toDate(),
+        startTime: `${bookingDto.startTime}:00`,
+        endTime: `${endTime}:00`,
+        barberman,
+        employeeId,
+        serviceId: bookingDto.serviceId,
       });
     });
   });

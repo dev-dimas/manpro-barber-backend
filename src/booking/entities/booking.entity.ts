@@ -2,32 +2,28 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BookingStatus } from '../../enum';
 import { UserEntity } from '../../user/entities/user.entity';
 import { ServiceEntity } from '../../service/entities/service.entity';
+import { EmployeeEntity } from '../../employee/entities/employee.entity';
 
 @Entity('booking')
 export class BookingEntity {
   @PrimaryColumn()
   id: string;
 
-  @Column()
-  name!: string;
+  @Column({ default: null })
+  name: string | null;
 
-  @Column()
-  email!: string;
+  @Column({ default: null })
+  phone: string | null;
 
-  @Column()
-  noTlp!: string;
-
-  @Column()
-  date: Date;
+  @Column({ type: 'date' })
+  date: string;
 
   @Column({
     type: 'time',
@@ -49,11 +45,15 @@ export class BookingEntity {
   })
   status: BookingStatus;
 
-  @ManyToOne(() => UserEntity, (user) => user.booking)
-  user!: UserEntity;
+  @ManyToOne(() => UserEntity, (user) => user.booking, { nullable: true })
+  user: UserEntity | null;
 
-  @OneToOne(() => ServiceEntity)
-  @JoinColumn()
+  @ManyToOne(() => EmployeeEntity, (employee) => employee.booking, {
+    nullable: true,
+  })
+  employee: EmployeeEntity | null;
+
+  @ManyToOne(() => ServiceEntity, (service) => service.booking)
   service: ServiceEntity;
 
   @CreateDateColumn()

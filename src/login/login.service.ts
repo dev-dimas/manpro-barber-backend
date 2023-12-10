@@ -58,10 +58,15 @@ export class LoginService {
     }
 
     delete employee.password;
-    const accessToken = await this.jwtService.signAsync({
-      sub: { ...employee },
-      role: employee.role,
-    });
+    const accessToken = employeeLoginDto.remember
+      ? await this.jwtService.signAsync({
+          sub: { ...employee },
+          role: employee.role,
+        })
+      : await this.jwtService.signAsync(
+          { sub: { ...employee }, role: employee.role },
+          { expiresIn: '1 days' },
+        );
     return { statusCode: HttpStatus.OK, data: { accessToken } };
   }
 }

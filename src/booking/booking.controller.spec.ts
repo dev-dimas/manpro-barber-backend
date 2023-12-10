@@ -5,6 +5,7 @@ import { BookingService } from './booking.service';
 import { BookingRepository } from './repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
 import { Repository } from 'typeorm';
+import { UserRepository } from '../user/repository/user.repository';
 
 describe('BookingController', () => {
   let controller: BookingController;
@@ -24,6 +25,10 @@ describe('BookingController', () => {
         },
         {
           provide: EmployeeRepository,
+          useClass: Repository,
+        },
+        {
+          provide: UserRepository,
           useClass: Repository,
         },
       ],

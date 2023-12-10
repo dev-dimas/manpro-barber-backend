@@ -4,9 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BookingEntity } from '../../booking/entities/booking.entity';
 
 @Entity('employee')
 export class EmployeeEntity {
@@ -44,6 +46,9 @@ export class EmployeeEntity {
   })
   @IsBoolean()
   isIncharge: boolean;
+
+  @OneToMany(() => BookingEntity, (booking) => booking.user)
+  booking: BookingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

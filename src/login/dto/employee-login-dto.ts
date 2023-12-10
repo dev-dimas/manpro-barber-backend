@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import { IsString, IsNotEmpty, IsEmail, IsBoolean } from 'class-validator';
 
 export class EmployeeLoginDto {
   @IsNotEmpty()
@@ -8,4 +8,8 @@ export class EmployeeLoginDto {
   @IsNotEmpty()
   @IsString()
   password: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  remember: boolean;
 }

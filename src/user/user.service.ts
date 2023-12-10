@@ -21,7 +21,10 @@ export class UserService {
     );
 
     if (isEmailExist) {
-      throw new HttpException(`Email is already taken!.`, HttpStatus.CONFLICT);
+      throw new HttpException(
+        `Email ${createUserDto.email} is already taken!.`,
+        HttpStatus.CONFLICT,
+      );
     }
 
     createUserDto.password = await argon2.hash(createUserDto.password);

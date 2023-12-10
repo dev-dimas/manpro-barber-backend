@@ -15,7 +15,7 @@ export class EmployeeService {
 
     if (isEmailExist) {
       throw new HttpException(
-        `Email @${createEmployeeDto.email} is already taken!.`,
+        `Email ${createEmployeeDto.email} is already taken!.`,
         HttpStatus.CONFLICT,
       );
     }
