@@ -8,8 +8,8 @@ import { BookingRepository } from './repository/booking.repository';
 import { BookingEntity } from './entities/booking.entity';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
 import { EmployeeEntity } from '../employee/entities/employee.entity';
-import { UserEntity } from '../user/entities/user.entity';
 import { UserRepository } from '../user/repository/user.repository';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Module({
   controllers: [BookingController],

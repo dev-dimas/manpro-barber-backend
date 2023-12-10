@@ -4,7 +4,6 @@ import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingRepository } from './repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
 import { HttpStatus } from '@nestjs/common';
-import dayjs from 'dayjs';
 import { UserRepository } from '../user/repository/user.repository';
 
 describe('BookingService', () => {
@@ -60,54 +59,6 @@ describe('BookingService', () => {
   });
 
   describe('Add Booking', () => {
-    it('should return conflict status code if the booking is full', async () => {
-      // Arrange
-      const createBookingDto = {
-        name: 'rudi',
-        phone: '098765435778',
-        date: '2023-10-09',
-        startTime: '08:00',
-        serviceId: '123',
-        userId: '123',
-        employeeId: '123',
-      };
-
-      const service = {
-        id: '123',
-        name: 'potong',
-        price: 20000,
-        duration: '00:40',
-      };
-
-      const user = {
-        id: '123',
-        name: 'Rudi',
-      };
-
-      const isBookingFull = {
-        status: true,
-      };
-
-      jest.spyOn(userRepositoryMock, 'getUserById').mockReturnValue(user);
-
-      jest
-        .spyOn(bookingService, 'bookingIsFull')
-        .mockResolvedValue(isBookingFull);
-
-      jest
-        .spyOn(serviceRepositoryMock, 'getServiceById')
-        .mockReturnValue(service);
-
-      // Action
-      const res = await bookingService.userAddBooking(createBookingDto);
-
-      // Assert
-      expect(res).toStrictEqual({
-        statusCode: HttpStatus.CONFLICT,
-        message: 'full',
-      });
-    });
-
     it('it should return created status code if booking is successful', async () => {
       // Arrange
       const createBookingDto = {
@@ -115,6 +66,8 @@ describe('BookingService', () => {
         phone: '098765435778',
         date: '2023-10-09',
         startTime: '08:00',
+        endTime: '08:40',
+        barberman: 1,
         serviceId: '123',
         userId: '123',
       };
@@ -146,27 +99,7 @@ describe('BookingService', () => {
         name: 'Rudi',
       };
 
-      let endTime = dayjs(
-        `${createBookingDto.date} ${createBookingDto.startTime}`,
-      );
-
-      const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
-
-      endTime = endTime
-        .add(Number(duration.format('H')), 'h')
-        .add(Number(duration.format('m')), 'm');
-
-      const isBookingFull = {
-        status: false,
-        barberman: 1,
-        endTime,
-      };
-
       jest.spyOn(userRepositoryMock, 'getUserById').mockReturnValue(user);
-
-      jest
-        .spyOn(bookingService, 'bookingIsFull')
-        .mockResolvedValue(isBookingFull);
 
       jest
         .spyOn(serviceRepositoryMock, 'getServiceById')
@@ -184,13 +117,6 @@ describe('BookingService', () => {
         statusCode: HttpStatus.CREATED,
         data: expectedBooking,
       });
-
-      expect(bookingRepositoryMock.userAddBooking).toBeCalledWith(
-        createBookingDto,
-        isBookingFull.endTime.format('HH:mm'),
-        isBookingFull.barberman,
-        expect.any(String),
-      );
     });
   });
 });

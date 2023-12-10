@@ -191,17 +191,14 @@ describe('BookingRepository', () => {
         phone: '098765435778',
         date: '2023-10-09',
         startTime: '08:00',
+        endTime: '08:40',
+        barberman: 1,
         serviceId: newService.id,
         userId,
       };
 
       // Action
-      const res = await bookingRepository.userAddBooking(
-        bookingDto,
-        endTime,
-        barberman,
-        idBooking,
-      );
+      const res = await bookingRepository.userAddBooking(bookingDto, idBooking);
 
       // Assert
       const allBooking = await bookingTableTestHelper.getAllBooking();

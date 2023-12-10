@@ -3,12 +3,11 @@ import {
   IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsUUID,
 } from 'class-validator';
 
-export class UserCreateBookingDto {
+export class PaymentDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
@@ -26,7 +25,7 @@ export class UserCreateBookingDto {
   @IsNotEmpty()
   @IsUUID('all')
   @ApiProperty({
-    default: '098765435778',
+    default: '8ec5aa7b-09f8-4e80-9182-dc150811d8a3',
   })
   userId: string;
 
@@ -45,23 +44,9 @@ export class UserCreateBookingDto {
   startTime: string;
 
   @IsNotEmpty()
-  @IsMilitaryTime()
-  @ApiProperty({
-    default: '09:00',
-  })
-  endTime: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({
-    default: 1,
-  })
-  barberman: number;
-
-  @IsNotEmpty()
   @IsUUID('all')
   @ApiProperty({
-    default: 'serviceId',
+    default: '8ec5aa7b-09f8-4e80-9182-dc150811d8a3',
   })
   serviceId: string;
 }

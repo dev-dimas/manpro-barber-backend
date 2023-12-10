@@ -3,8 +3,8 @@ import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingRepository } from './repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
-import { UserRepository } from '../user/repository/user.repository';
 import { EmployeeCreateBookingDto, UserCreateBookingDto } from './dto';
+import { UserRepository } from '../user/repository/user.repository';
 
 @Injectable()
 export class BookingService {
@@ -15,9 +15,7 @@ export class BookingService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async bookingIsFull(serviceId: string, date: string, startTime: string) {
-    const service = await this.serviceRepository.getServiceById(serviceId);
-
+  async bookingIsFull(service: any, date: string, startTime: string) {
     const employeeInCharge =
       await this.employeeRepository.countEmployeeInCharge();
 
@@ -39,31 +37,25 @@ export class BookingService {
     if (numberOfBooking >= employeeInCharge) return { status: true };
 
     const barberman = 1 + numberOfBooking;
-    return { status: true, barberman, endTime };
+    return { status: false, barberman, endTime: endTime.format('HH:mm') };
   }
 
   async userAddBooking(userCreateBookingDto: UserCreateBookingDto) {
     const user = await this.userRepository.getUserById(
       userCreateBookingDto.userId,
     );
-
     if (!user) throw new HttpException(`User not found`, HttpStatus.NOT_FOUND);
+
+    const service = await this.serviceRepository.getServiceById(
+      userCreateBookingDto.serviceId,
+    );
+    if (!service)
+      throw new HttpException(`Service not found`, HttpStatus.NOT_FOUND);
 
     const id = Date.now().toString();
 
-    const bookingIsFull = await this.bookingIsFull(
-      userCreateBookingDto.serviceId,
-      userCreateBookingDto.date,
-      userCreateBookingDto.startTime,
-    );
-
-    if (bookingIsFull.status)
-      return { statusCode: HttpStatus.CONFLICT, message: 'full' };
-
     const newBooking = await this.bookingRepository.userAddBooking(
       userCreateBookingDto,
-      bookingIsFull.endTime.format('HH:mm'),
-      bookingIsFull.barberman,
       id,
     );
 
@@ -74,14 +66,19 @@ export class BookingService {
     const employee = await this.employeeRepository.getEmployeeById(
       employeeCreateBookingDto.employeeId,
     );
-
     if (!employee)
       throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
+
+    const service = await this.serviceRepository.getServiceById(
+      employeeCreateBookingDto.serviceId,
+    );
+    if (!service)
+      throw new HttpException(`Service not found`, HttpStatus.NOT_FOUND);
 
     const id = Date.now().toString();
 
     const bookingIsFull = await this.bookingIsFull(
-      employeeCreateBookingDto.serviceId,
+      service,
       employeeCreateBookingDto.date,
       employeeCreateBookingDto.startTime,
     );
@@ -91,7 +88,7 @@ export class BookingService {
 
     const newBooking = await this.bookingRepository.employeeAddBooking(
       employeeCreateBookingDto,
-      bookingIsFull.endTime.format('HH:mm'),
+      bookingIsFull.endTime,
       bookingIsFull.barberman,
       id,
     );
