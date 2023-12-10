@@ -1,10 +1,9 @@
-import { EmployeeEntity } from '../../employee/entities/employee.entity';
-
+import { BookingEntity } from '../../booking/entities/booking.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,8 +22,13 @@ export class ServiceEntity {
   @Column({ type: 'time' })
   duration: string;
 
-  // @ManyToOne(() => EmployeeEntity, (employee) => employee.services)
-  // employee: EmployeeEntity;
+  @Column({
+    default: null,
+  })
+  information: string | null;
+
+  @OneToMany(() => BookingEntity, (booking) => booking.user)
+  booking: BookingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

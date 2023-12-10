@@ -12,7 +12,12 @@ export class UserRepository {
   ) {}
 
   async addUser(user: CreateUserDto) {
-    return await this.repository.save(user);
+    return await this.repository.save({
+      password: user.password,
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+    });
   }
 
   async getAllUser() {
@@ -25,20 +30,38 @@ export class UserRepository {
     });
   }
 
-  async getUserByUsername(username: string) {
+  async getUserByEmail(email: string) {
     return await this.repository.findOneBy({
-      username,
+      email,
     });
   }
 
-  async updateUserById(id: string, user: UpdateUserDto) {
+  async updateUserById(
+    id: string,
+    avatar: string,
+    path: string,
+    user: UpdateUserDto,
+  ) {
     return await this.repository
       .createQueryBuilder()
       .update(UserEntity)
-      .set(user)
+      .set({
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        gender: user.gender,
+        birthdayDate: user.birthdayDate,
+        address: user.address,
+        avatar,
+        pathAvatar: path,
+      })
       .where('id = :id', { id })
       .returning('*')
       .execute();
+  }
+
+  async changePassword(id: string, password: string) {
+    return await this.repository.update({ id }, { password });
   }
 
   async deleteUserById(id: string) {

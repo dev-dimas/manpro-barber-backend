@@ -1,6 +1,6 @@
 export enum BookingStatus {
-  BOOKING = 'dipesan',
-  SERVED = 'dilayani',
-  SUCCESS = 'sukses',
-  FAILED = 'gagal',
+  BOOKING = 'booking',
+  SUCCESS = 'success',
+  PANDING = 'panding',
+  FAILED = 'failed',
 }

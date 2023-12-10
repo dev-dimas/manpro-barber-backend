@@ -6,13 +6,11 @@ import {
   Param,
   Patch,
   Post,
-  Req,
 } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { Public, Roles } from '../decorator';
 import { Role } from '../enum';
 import { CreateServiceDto, UpdateServiceDto } from './dto';
-import { Request } from 'express';
 
 @Controller('service')
 export class ServiceController {
@@ -24,23 +22,19 @@ export class ServiceController {
     return this.serviceService.getAllService();
   }
 
-  @Roles(Role.ADMIN, Role.OWNER)
+  @Public()
   @Post()
-  createService(
-    @Body() createServiceDto: CreateServiceDto,
-    @Req() req: Request,
-  ) {
-    return this.serviceService.createService(createServiceDto, req.user);
+  createService(@Body() createServiceDto: CreateServiceDto) {
+    return this.serviceService.createService(createServiceDto);
   }
 
-  @Roles(Role.ADMIN, Role.OWNER)
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Patch(':service')
   updateService(
     @Param('service') id: string,
     @Body() updateServiceDto: UpdateServiceDto,
-    @Req() req: Request,
   ) {
-    return this.serviceService.updateService(id, updateServiceDto, req.user);
+    return this.serviceService.updateService(id, updateServiceDto);
   }
 
   @Public()
@@ -49,7 +43,7 @@ export class ServiceController {
     return this.serviceService.getservice(id);
   }
 
-  @Roles(Role.OWNER)
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Delete(':service')
   deleteService(@Param('service') id: string) {
     return this.serviceService.deleteService(id);

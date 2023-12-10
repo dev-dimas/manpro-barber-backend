@@ -1,6 +1,5 @@
 import { IsBoolean } from 'class-validator';
 import { GenderType, EmployeeRoleType } from '../../enum';
-import { ServiceEntity } from '../../service/entities/service.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BookingEntity } from '../../booking/entities/booking.entity';
 
 @Entity('employee')
 export class EmployeeEntity {
@@ -25,7 +25,7 @@ export class EmployeeEntity {
   password: string;
 
   @Column()
-  noTlp: string;
+  phone: string;
 
   @Column({
     type: 'enum',
@@ -47,8 +47,8 @@ export class EmployeeEntity {
   @IsBoolean()
   isIncharge: boolean;
 
-  // @OneToMany(() => ServiceEntity, (service) => service.employee)
-  // services: ServiceEntity[];
+  @OneToMany(() => BookingEntity, (booking) => booking.user)
+  booking: BookingEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

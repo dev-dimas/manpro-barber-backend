@@ -1,9 +1,10 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreateBookingDto } from './dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingRepository } from './repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
+import { UserRepository } from '../user/repository/user.repository';
+import { EmployeeCreateBookingDto, UserCreateBookingDto } from './dto';
 
 @Injectable()
 export class BookingService {
@@ -11,23 +12,18 @@ export class BookingService {
     private readonly bookingRepository: BookingRepository,
     private readonly serviceRepository: ServiceRepository,
     private readonly employeeRepository: EmployeeRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
-  async addBooking(createBookingDto: CreateBookingDto, user: any) {
-    const id = Date.now().toString();
-
-    const service = await this.serviceRepository.getServiceById(
-      createBookingDto.service,
-    );
+  async bookingIsFull(serviceId: string, date: string, startTime: string) {
+    const service = await this.serviceRepository.getServiceById(serviceId);
 
     const employeeInCharge =
       await this.employeeRepository.countEmployeeInCharge();
 
-    let endTime = dayjs(
-      `${createBookingDto.date} ${createBookingDto.startTime}`,
-    );
+    let endTime = dayjs(`${date} ${startTime}`);
 
-    const duration = dayjs(`${createBookingDto.date} ${service.duration}`);
+    const duration = dayjs(`${date} ${service.duration}`);
 
     endTime = endTime
       .add(Number(duration.format('H')), 'h')
@@ -35,20 +31,68 @@ export class BookingService {
 
     const numberOfBooking =
       await this.bookingRepository.countBookingByRangeStartEndTime(
-        createBookingDto.startTime,
+        startTime,
         endTime.format('HH:mm'),
-        dayjs(createBookingDto.date).toDate(),
+        dayjs(date).toDate(),
       );
 
-    if (numberOfBooking >= employeeInCharge)
-      return { statusCode: HttpStatus.CONFLICT, message: 'full' };
+    if (numberOfBooking >= employeeInCharge) return { status: true };
 
     const barberman = 1 + numberOfBooking;
-    const newBooking = await this.bookingRepository.addBooking(
-      createBookingDto,
-      endTime,
-      user?.id,
-      barberman,
+    return { status: true, barberman, endTime };
+  }
+
+  async userAddBooking(userCreateBookingDto: UserCreateBookingDto) {
+    const user = await this.userRepository.getUserById(
+      userCreateBookingDto.userId,
+    );
+
+    if (!user) throw new HttpException(`User not found`, HttpStatus.NOT_FOUND);
+
+    const id = Date.now().toString();
+
+    const bookingIsFull = await this.bookingIsFull(
+      userCreateBookingDto.serviceId,
+      userCreateBookingDto.date,
+      userCreateBookingDto.startTime,
+    );
+
+    if (bookingIsFull.status)
+      return { statusCode: HttpStatus.CONFLICT, message: 'full' };
+
+    const newBooking = await this.bookingRepository.userAddBooking(
+      userCreateBookingDto,
+      bookingIsFull.endTime.format('HH:mm'),
+      bookingIsFull.barberman,
+      id,
+    );
+
+    return { statusCode: HttpStatus.CREATED, data: newBooking.raw[0] };
+  }
+
+  async employeeAddBooking(employeeCreateBookingDto: EmployeeCreateBookingDto) {
+    const employee = await this.employeeRepository.getEmployeeById(
+      employeeCreateBookingDto.employeeId,
+    );
+
+    if (!employee)
+      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
+
+    const id = Date.now().toString();
+
+    const bookingIsFull = await this.bookingIsFull(
+      employeeCreateBookingDto.serviceId,
+      employeeCreateBookingDto.date,
+      employeeCreateBookingDto.startTime,
+    );
+
+    if (bookingIsFull.status)
+      return { statusCode: HttpStatus.CONFLICT, message: 'full' };
+
+    const newBooking = await this.bookingRepository.employeeAddBooking(
+      employeeCreateBookingDto,
+      bookingIsFull.endTime.format('HH:mm'),
+      bookingIsFull.barberman,
       id,
     );
 

@@ -3,16 +3,16 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
-  Req,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto, UpdateEmployeeDto } from './dto';
 import { Public, Roles } from '../decorator';
 import { Role } from '../enum';
-import { Request } from 'express';
 
 @Controller('employee')
 export class EmployeeController {
@@ -24,19 +24,20 @@ export class EmployeeController {
     return this.employeeService.getAllEmployee();
   }
 
-  @Roles(Role.ADMIN, Role.OWNER)
+  @Public()
   @Post()
-  createEmpolyee(
-    @Body() createEmployeeDto: CreateEmployeeDto,
-    @Req() req: Request,
-  ) {
-    return this.employeeService.createEmployee(createEmployeeDto, req.user);
+  createEmpolyee(@Body() createEmployeeDto: CreateEmployeeDto) {
+    return this.employeeService.createEmployee(createEmployeeDto);
   }
 
-  @Roles(Role.ADMIN, Role.OWNER)
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Patch(':employee')
   updateEmployee(
-    @Param('employee') id: string,
+    @Param(
+      'employee',
+      new ParseUUIDPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: string,
     @Body() updateEmployee: UpdateEmployeeDto,
   ) {
     return this.employeeService.updateEmployee(id, updateEmployee);
@@ -44,13 +45,25 @@ export class EmployeeController {
 
   @Public()
   @Get(':employee')
-  getEmployee(@Param('employee') id: string) {
+  getEmployee(
+    @Param(
+      'employee',
+      new ParseUUIDPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: string,
+  ) {
     return this.employeeService.getEmployee(id);
   }
 
-  @Roles(Role.OWNER)
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Delete(':employee')
-  deleteEmployee(@Param('employee') id: string) {
+  deleteEmployee(
+    @Param(
+      'employee',
+      new ParseUUIDPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: string,
+  ) {
     return this.employeeService.deleteEmployee(id);
   }
 }

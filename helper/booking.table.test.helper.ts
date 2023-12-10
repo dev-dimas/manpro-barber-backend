@@ -14,7 +14,6 @@ export class BookingTableTestHelper {
   async addBooking({
     id = 'booking-123',
     name = 'andi',
-    email = 'andi@gmail.com',
     noTlp = '18129210231',
     date = '2023-10-09',
     startTime = '08:00',
@@ -24,7 +23,6 @@ export class BookingTableTestHelper {
   }) {
     return await this.repository.save({
       name,
-      email,
       date,
       noTlp,
       startTime,

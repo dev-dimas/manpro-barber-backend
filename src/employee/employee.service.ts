@@ -8,19 +8,14 @@ import { EmployeeRepository } from './repository/employee.repository';
 export class EmployeeService {
   constructor(private readonly employeeRepository: EmployeeRepository) {}
 
-  async createEmployee(createEmployeeDto: CreateEmployeeDto, user: any) {
-    const employee = await this.getEmployee(user.sub);
-
-    if (!employee)
-      throw new HttpException(`Employee not found`, HttpStatus.NOT_FOUND);
-
+  async createEmployee(createEmployeeDto: CreateEmployeeDto) {
     const isEmailExist = await this.employeeRepository.getEmployeeByEmail(
       createEmployeeDto.email,
     );
 
     if (isEmailExist) {
       throw new HttpException(
-        `Email @${createEmployeeDto.email} is already taken!.`,
+        `Email ${createEmployeeDto.email} is already taken!.`,
         HttpStatus.CONFLICT,
       );
     }

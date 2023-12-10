@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { SeederController } from './seeder.controller';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
 import { SeederService } from './seeder.service';
+import { ServiceRepository } from '../service/repository/service.repository';
 
 describe('SeederController', () => {
   let controller: SeederController;
@@ -12,6 +13,7 @@ describe('SeederController', () => {
       providers: [
         SeederService,
         { provide: EmployeeRepository, useValue: { addEmployee: jest.fn() } },
+        { provide: ServiceRepository, useValue: { addService: jest.fn() } },
       ],
       controllers: [SeederController],
     }).compile();
@@ -19,6 +21,7 @@ describe('SeederController', () => {
     controller = module.get<SeederController>(SeederController);
     service = module.get<SeederService>(SeederService);
     module.get<EmployeeRepository>(EmployeeRepository);
+    module.get<ServiceRepository>(ServiceRepository);
   });
 
   it('should be defined', () => {

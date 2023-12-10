@@ -1,34 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
-  IsEmail,
   IsMilitaryTime,
   IsNotEmpty,
   IsString,
   IsUUID,
 } from 'class-validator';
 
-export class CreateBookingDto {
+export class UserCreateBookingDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    default: 'Bambang',
+    default: 'Rudi',
   })
   name: string;
 
   @IsNotEmpty()
-  @IsEmail()
-  @ApiProperty({
-    default: 'Bambang@gmail.com',
-  })
-  email: string;
-
-  @IsNotEmpty()
   @IsString()
   @ApiProperty({
-    default: '0392024330',
+    default: '098765435778',
   })
-  noTlp: string;
+  phone: string;
+
+  @IsNotEmpty()
+  @IsUUID('all')
+  @ApiProperty({
+    default: '098765435778',
+  })
+  userId: string;
 
   @IsNotEmpty()
   @IsDateString()
@@ -46,9 +45,8 @@ export class CreateBookingDto {
 
   @IsNotEmpty()
   @IsUUID('all')
-  @IsString()
   @ApiProperty({
     default: 'serviceId',
   })
-  service: string;
+  serviceId: string;
 }
