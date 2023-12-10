@@ -1,19 +1,21 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BookingController } from './booking.controller';
-import { ServiceRepository } from '../service/repository/service.repository';
-import { BookingService } from './booking.service';
-import { BookingRepository } from './repository/booking.repository';
+import { PaymentController } from './payment.controller';
+import { PaymentService } from './payment.service';
+import { BookingService } from '../booking/booking.service';
+import { BookingRepository } from '../booking/repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
-import { Repository } from 'typeorm';
+import { ServiceRepository } from '../service/repository/service.repository';
 import { UserRepository } from '../user/repository/user.repository';
+import { Repository } from 'typeorm';
 
-describe('BookingController', () => {
-  let controller: BookingController;
+describe('PaymentController', () => {
+  let controller: PaymentController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [BookingController],
+      controllers: [PaymentController],
       providers: [
+        PaymentService,
         BookingService,
         {
           provide: BookingRepository,
@@ -34,7 +36,7 @@ describe('BookingController', () => {
       ],
     }).compile();
 
-    controller = module.get<BookingController>(BookingController);
+    controller = module.get<PaymentController>(PaymentController);
   });
 
   it('should be defined', () => {

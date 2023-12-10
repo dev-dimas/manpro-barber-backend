@@ -16,6 +16,7 @@ import { PasswordController } from './password/password.controller';
 import { PasswordService } from './password/password.service';
 import { PasswordModule } from './password/password.module';
 import { AvatarController } from './avatar/avatar.controller';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   providers: [
@@ -50,6 +51,7 @@ import { AvatarController } from './avatar/avatar.controller';
     SeederModule,
     BookingModule,
     PasswordModule,
+    PaymentModule,
   ],
   controllers: [AvatarController],
 })

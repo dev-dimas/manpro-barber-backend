@@ -37,12 +37,7 @@ export class BookingRepository {
       .getCount();
   }
 
-  async userAddBooking(
-    userCreateBookingDto: UserCreateBookingDto,
-    endTime: any,
-    barberman: number,
-    id: string,
-  ) {
+  async userAddBooking(userCreateBookingDto: UserCreateBookingDto, id: string) {
     return await this.repository
       .createQueryBuilder()
       .insert()
@@ -53,8 +48,8 @@ export class BookingRepository {
         phone: userCreateBookingDto.phone,
         startTime: userCreateBookingDto.startTime,
         date: userCreateBookingDto.date,
-        endTime,
-        barberman,
+        endTime: userCreateBookingDto.endTime,
+        barberman: userCreateBookingDto.barberman,
         user: {
           id: userCreateBookingDto.userId,
         },
@@ -79,7 +74,6 @@ export class BookingRepository {
         name: employeeCreateBookingDto.name,
         startTime: employeeCreateBookingDto.startTime,
         date: employeeCreateBookingDto.date,
-        status: BookingStatus.BOOKING,
         endTime,
         barberman,
         employee: {
