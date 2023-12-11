@@ -62,7 +62,7 @@ export class BookingRepository {
   async employeeAddBooking(
     employeeCreateBookingDto: EmployeeCreateBookingDto,
     endTime: any,
-    barberman: number,
+    barberman: string,
     id: string,
   ) {
     return await this.repository
@@ -83,5 +83,65 @@ export class BookingRepository {
       })
       .returning('*')
       .execute();
+  }
+
+  async updateBookingStatus(id: string, employeeId: string) {
+    return await this.repository
+      .createQueryBuilder()
+      .update(BookingEntity)
+      .set({
+        status: BookingStatus.SUCCESS,
+        employee: {
+          id: employeeId,
+        },
+      })
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+  }
+
+  async getBookingById(id: string) {
+    return await this.repository.findOneBy({
+      id,
+    });
+  }
+
+  async getAllBookingByStatusBookingAndDate(date: string) {
+    return await this.repository.find({
+      where: { status: BookingStatus.BOOKING, date },
+    });
+  }
+
+  async getAllBookingByDate(date: string) {
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select(
+        'booking.date, booking.startTime, booking.userId, booking.serviceId, booking.name',
+      )
+      .where('booking.date = :date', { date })
+      .orderBy('booking.startTime', 'ASC')
+      .execute();
+  }
+
+  async getAllBookingByUserId(userId: string) {
+    return await this.repository.find({
+      where: { user: { id: userId } },
+      order: { date: 'DESC' },
+      take: 10,
+    });
+  }
+
+  async countAllBookingSuccesByUserId(userId: string) {
+    return await this.repository.count({
+      where: { user: { id: userId }, status: BookingStatus.SUCCESS },
+    });
+  }
+
+  async getLastTimeHaircut(userId: string) {
+    return await this.repository.find({
+      where: { user: { id: userId }, status: BookingStatus.SUCCESS },
+      order: { date: 'DESC' },
+      take: 1,
+    });
   }
 }

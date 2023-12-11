@@ -17,7 +17,7 @@ export class EmployeeRepository {
   }
 
   async getAllEmployee() {
-    return await this.repository.find();
+    return await this.repository.find({ order: { createdAt: 'ASC' } });
   }
 
   async getEmployeeById(id: string) {

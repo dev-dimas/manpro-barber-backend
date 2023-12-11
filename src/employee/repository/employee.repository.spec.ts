@@ -62,7 +62,7 @@ describe('EmployeeRepository', () => {
         phone: '18129210231',
         password: 'andi12345',
         gender: GenderType.L,
-        role: EmployeeRoleType.ADMIN,
+        role: EmployeeRoleType.BARBERMAN,
       };
 
       const employee2 = {
@@ -71,7 +71,7 @@ describe('EmployeeRepository', () => {
         phone: '28291212922',
         password: 'ando12345',
         gender: GenderType.L,
-        role: EmployeeRoleType.ADMIN,
+        role: EmployeeRoleType.BARBERMAN,
       };
 
       await employeeTableTestHelper.addEmployee(employee1);
@@ -82,6 +82,8 @@ describe('EmployeeRepository', () => {
 
       // Assert
       expect(allEmployee).toHaveLength(2);
+      expect(allEmployee[0]).toMatchObject(employee1);
+      expect(allEmployee[1]).toMatchObject(employee2);
       expect(allEmployee).toMatchObject([{ ...employee1 }, { ...employee2 }]);
     });
   });

@@ -17,9 +17,13 @@ export class BookingTableTestHelper {
     noTlp = '18129210231',
     date = '2023-10-09',
     startTime = '08:00',
+    phone = '087908789000',
     endTime = '09:00',
-    barberman = 1,
+    barberman = 'Helos',
     status = BookingStatus.BOOKING,
+    serviceId = 'serviceId',
+    userId = null,
+    employeeId = null,
   }) {
     return await this.repository.save({
       name,
@@ -28,8 +32,18 @@ export class BookingTableTestHelper {
       startTime,
       endTime,
       barberman,
+      phone,
       status,
       id,
+      user: {
+        id: userId,
+      },
+      employee: {
+        id: employeeId,
+      },
+      service: {
+        id: serviceId,
+      },
     });
   }
 
