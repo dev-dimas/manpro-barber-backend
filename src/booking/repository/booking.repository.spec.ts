@@ -73,12 +73,20 @@ describe('BookingRepository', () => {
       const endTime2 = '15:40:00';
       const date = '2023-10-09';
 
+      const service = {
+        name: 'potong',
+        price: 20000,
+        duration: '00:40',
+      };
+      const newService = await serviceTableTestHelper.addService(service);
+
       const booking1 = {
         id: 'booking-123',
         date: date,
         startTime: '08:30',
         endTime: '09:10',
         status: BookingStatus.BOOKING,
+        serviceId: newService.id,
       };
 
       // status booking success
@@ -88,6 +96,7 @@ describe('BookingRepository', () => {
         startTime: '09:10',
         endTime: '09:50',
         status: BookingStatus.SUCCESS,
+        serviceId: newService.id,
       };
 
       // status booking failed
@@ -97,6 +106,7 @@ describe('BookingRepository', () => {
         startTime: '09:20',
         endTime: '10:00',
         status: BookingStatus.FAILED,
+        serviceId: newService.id,
       };
 
       // different date
@@ -106,6 +116,7 @@ describe('BookingRepository', () => {
         startTime: '09:30',
         endTime: '10:10',
         status: BookingStatus.BOOKING,
+        serviceId: newService.id,
       };
 
       // out of range time
@@ -115,6 +126,7 @@ describe('BookingRepository', () => {
         startTime: '09:50',
         endTime: '10:30',
         status: BookingStatus.BOOKING,
+        serviceId: newService.id,
       };
 
       // booking status pandding
@@ -124,6 +136,7 @@ describe('BookingRepository', () => {
         startTime: '08:30',
         endTime: '09:10',
         status: BookingStatus.PANDING,
+        serviceId: newService.id,
       };
 
       // true
@@ -133,6 +146,7 @@ describe('BookingRepository', () => {
         startTime: '09:30',
         endTime: '10:10',
         status: BookingStatus.BOOKING,
+        serviceId: newService.id,
       };
 
       await bookingTableTestHelper.addBooking(booking1);
@@ -184,7 +198,7 @@ describe('BookingRepository', () => {
       const userId = newUser.id;
       const endTime = '08:40';
       const idBooking = Date.now().toString();
-      const barberman = 1;
+      const barberman = 'Helos';
 
       const bookingDto = {
         name: 'rudi',
@@ -192,7 +206,7 @@ describe('BookingRepository', () => {
         date: '2023-10-09',
         startTime: '08:00',
         endTime: '08:40',
-        barberman: 1,
+        barberman,
         serviceId: newService.id,
         userId,
       };
@@ -242,7 +256,7 @@ describe('BookingRepository', () => {
       const employeeId = newEmployee.id;
       const endTime = '08:40';
       const idBooking = Date.now().toString();
-      const barberman = 1;
+      const barberman = 'Helos';
 
       const bookingDto = {
         name: 'rudi',
@@ -275,6 +289,215 @@ describe('BookingRepository', () => {
         employeeId,
         serviceId: bookingDto.serviceId,
       });
+    });
+  });
+
+  describe('updateBookingStatus', () => {
+    it('should update status booking to database and return correctly', async () => {
+      // Arrange
+      const user = {
+        password: 'andi123',
+        email: 'andi123@gmail.com',
+        name: 'andi',
+        phone: '081234876945',
+      };
+      const newUser = await userTableTestHelper.addUser(user);
+
+      const service = {
+        name: 'potong',
+        price: 20000,
+        duration: '00:40',
+      };
+      const newService = await serviceTableTestHelper.addService(service);
+
+      const employee = {
+        name: 'andi',
+        email: 'andi@gmail.com',
+        phone: '18129210231',
+        password: 'andi12345',
+        gender: GenderType.L,
+        role: EmployeeRoleType.BARBERMAN,
+      };
+      const newEmployee = await employeeTableTestHelper.addEmployee(employee);
+
+      const booking = {
+        id: 'booking-129',
+        date: '2023-10-09',
+        startTime: '09:30',
+        endTime: '10:10',
+        phone: '087908789000',
+        status: BookingStatus.BOOKING,
+        userId: newUser.id,
+        serviceId: newService.id,
+        employeeId: null,
+      };
+
+      const newBooking = await bookingTableTestHelper.addBooking(booking);
+
+      // Action
+      const res = await bookingRepository.updateBookingStatus(
+        newBooking.id,
+        newEmployee.id,
+      );
+
+      expect(res.affected).toEqual(1);
+      expect(res.raw[0]).toMatchObject({
+        id: newBooking.id,
+        status: BookingStatus.SUCCESS,
+        userId: newUser.id,
+        serviceId: newService.id,
+        name: newBooking.name,
+        phone: newBooking.phone,
+        employeeId: newEmployee.id,
+        barberman: newBooking.barberman,
+        date: dayjs(booking.date).toDate(),
+        startTime: `${booking.startTime}:00`,
+        endTime: `${booking.endTime}:00`,
+      });
+    });
+  });
+
+  describe('getAllBookingByStatusBookingAndDate', () => {
+    it('should get booking by status booking and date from database and return correctly', async () => {
+      // Arrange
+      const date = '2023-10-09';
+
+      const service = {
+        name: 'potong',
+        price: 20000,
+        duration: '00:40',
+      };
+      const newService = await serviceTableTestHelper.addService(service);
+
+      const booking1 = {
+        id: 'booking-123',
+        date: date,
+        startTime: '08:30:00',
+        endTime: '09:10:00',
+        status: BookingStatus.SUCCESS,
+        serviceId: newService.id,
+      };
+
+      const booking2 = {
+        id: 'booking-124',
+        date: date,
+        startTime: '09:20:00',
+        endTime: '10:00:00',
+        status: BookingStatus.BOOKING,
+        serviceId: newService.id,
+      };
+
+      const booking3 = {
+        id: 'booking-125',
+        date: date,
+        startTime: '09:20:00',
+        endTime: '10:00:00',
+        status: BookingStatus.BOOKING,
+        serviceId: newService.id,
+      };
+
+      const booking4 = {
+        id: 'booking-126',
+        date: date,
+        startTime: '09:30:00',
+        endTime: '10:10:00',
+        status: BookingStatus.BOOKING,
+        serviceId: newService.id,
+      };
+
+      const booking5 = {
+        id: 'booking-126',
+        date: '2023-10-09',
+        startTime: '09:30:00',
+        endTime: '10:10:00',
+        status: BookingStatus.BOOKING,
+        serviceId: newService.id,
+      };
+
+      await bookingTableTestHelper.addBooking(booking1);
+      await bookingTableTestHelper.addBooking(booking2);
+      await bookingTableTestHelper.addBooking(booking3);
+      await bookingTableTestHelper.addBooking(booking4);
+      await bookingTableTestHelper.addBooking(booking5);
+
+      // Action
+      const res = await bookingRepository.getAllBookingByStatusBookingAndDate(
+        date,
+      );
+
+      expect(res).toHaveLength(3);
+    });
+  });
+
+  describe('coba', () => {
+    it('coba', async () => {
+      // Arrange
+      const date = '2023-12-11';
+
+      const service = {
+        name: 'potong',
+        price: 20000,
+        duration: '00:40',
+      };
+      const newService = await serviceTableTestHelper.addService(service);
+
+      const user1 = {
+        password: 'andi123',
+        email: 'andi123@gmail.com',
+        name: 'andi',
+        phone: '081234876945',
+      };
+      const newUser1 = await userTableTestHelper.addUser(user1);
+
+      const user2 = {
+        password: 'rudi123',
+        email: 'rudi123@gmail.com',
+        name: 'rudi',
+        phone: '081234876945',
+      };
+      const newUser2 = await userTableTestHelper.addUser(user2);
+
+      const user3 = {
+        password: 'soni123',
+        email: 'soni123@gmail.com',
+        name: 'soni',
+        phone: '081234876945',
+      };
+      const newUser3 = await userTableTestHelper.addUser(user3);
+
+      const booking1 = {
+        id: 'booking-123',
+        date: date,
+        startTime: '08:30:00',
+        endTime: '09:10:00',
+        status: BookingStatus.SUCCESS,
+        serviceId: newService.id,
+        userId: newUser1.id,
+      };
+
+      const booking2 = {
+        id: 'booking-124',
+        date: date,
+        startTime: '09:20:00',
+        endTime: '10:00:00',
+        status: BookingStatus.BOOKING,
+        serviceId: newService.id,
+        userId: newUser2.id,
+      };
+
+      const booking3 = {
+        id: 'booking-125',
+        date: date,
+        startTime: '09:20:00',
+        endTime: '10:00:00',
+        status: BookingStatus.BOOKING,
+        serviceId: newService.id,
+        userId: newUser3.id,
+      };
+
+      await bookingTableTestHelper.addBooking(booking1);
+      await bookingTableTestHelper.addBooking(booking2);
+      await bookingTableTestHelper.addBooking(booking3);
     });
   });
 });

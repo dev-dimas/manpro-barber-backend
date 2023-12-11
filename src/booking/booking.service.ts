@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingRepository } from './repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
-import { EmployeeCreateBookingDto, UserCreateBookingDto } from './dto';
+import { DateDto, EmployeeCreateBookingDto, UserCreateBookingDto } from './dto';
 import { UserRepository } from '../user/repository/user.repository';
 
 @Injectable()
@@ -36,7 +36,8 @@ export class BookingService {
 
     if (numberOfBooking >= employeeInCharge) return { status: true };
 
-    const barberman = 1 + numberOfBooking;
+    const employee = await this.employeeRepository.getAllEmployee();
+    const barberman = employee[numberOfBooking].name;
     return { status: false, barberman, endTime: endTime.format('HH:mm') };
   }
 
@@ -94,5 +95,96 @@ export class BookingService {
     );
 
     return { statusCode: HttpStatus.CREATED, data: newBooking.raw[0] };
+  }
+
+  async updateBookingStatus(id: string, req: any) {
+    const booking = await this.bookingRepository.getBookingById(id);
+    if (!booking)
+      throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
+
+    const res = await this.bookingRepository.updateBookingStatus(
+      id,
+      req.user.sub.id,
+    );
+    return { statusCode: HttpStatus.OK, data: res.raw[0] };
+  }
+
+  async getBookingForChart(dateDto: DateDto) {
+    const bookings =
+      await this.bookingRepository.getAllBookingByStatusBookingAndDate(
+        dateDto.date,
+      );
+
+    const res = bookings.map((booking) => {
+      return {
+        barber: booking.barberman,
+        start: dayjs(`${booking.date} ${booking.startTime}`),
+        end: dayjs(`${booking.date} ${booking.endTime}`),
+      };
+    });
+
+    return { statusCode: HttpStatus.OK, data: res };
+  }
+
+  async getBookingForConfirmBooking() {
+    const date = dayjs().format('YYYY-MM-DD');
+    const booking =
+      await this.bookingRepository.getAllBookingByStatusBookingAndDate(date);
+
+    return { statusCode: HttpStatus.OK, data: booking };
+  }
+
+  async getTransactionHistory(req: any) {
+    const userId = req.user.sub.id;
+
+    const booking = await this.bookingRepository.getAllBookingByUserId(userId);
+
+    return { statusCode: HttpStatus.OK, data: booking };
+  }
+
+  async getDataForDashboardUser(req: any) {
+    const userId = req.user.sub.id;
+    const date = dayjs().format('YYYY-MM-DD');
+    let queque: number | null = null;
+    let serviceName: string | null = null;
+
+    const transactionSucces =
+      await this.bookingRepository.countAllBookingSuccesByUserId(userId);
+
+    const lastTimeHaircut = await this.bookingRepository.getLastTimeHaircut(
+      userId,
+    );
+
+    const bookings = await this.bookingRepository.getAllBookingByDate(date);
+
+    let foundIndex = -1;
+
+    bookings.forEach((booking, index) => {
+      if (booking.userId === userId) {
+        foundIndex = index;
+      }
+    });
+
+    if (foundIndex !== -1) {
+      queque = foundIndex + 1;
+    }
+
+    if (bookings[foundIndex]) {
+      const service = await this.serviceRepository.getServiceById(
+        bookings[foundIndex].serviceId,
+      );
+      serviceName = service.name;
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      data: {
+        booking: bookings[foundIndex],
+        transactionSucces,
+        lastTimeHaircut,
+        queque,
+        serviceName,
+      },
+    };
   }
 }

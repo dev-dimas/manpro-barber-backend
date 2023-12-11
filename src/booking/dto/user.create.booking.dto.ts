@@ -52,11 +52,11 @@ export class UserCreateBookingDto {
   endTime: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @IsString()
   @ApiProperty({
-    default: 1,
+    default: 'Helos',
   })
-  barberman: number;
+  barberman: string;
 
   @IsNotEmpty()
   @IsUUID('all')

@@ -67,7 +67,7 @@ describe('BookingService', () => {
         date: '2023-10-09',
         startTime: '08:00',
         endTime: '08:40',
-        barberman: 1,
+        barberman: 'Helos',
         serviceId: '123',
         userId: '123',
       };
@@ -91,7 +91,7 @@ describe('BookingService', () => {
         userId: '63f1aa6f-e38b-4825-a389-8990c3d16e1c',
         serviceId: '6d2c1075-5f28-47aa-9505-eb384b35f57a',
         employeeId: null,
-        barberman: 1,
+        barberman: 'Helos',
       };
 
       const user = {
