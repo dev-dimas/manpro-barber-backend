@@ -6,7 +6,6 @@ import { ServiceService } from './service.service';
 
 describe('ServiceController', () => {
   let controller: ServiceController;
-  let service: ServiceService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,7 +28,7 @@ describe('ServiceController', () => {
     }).compile();
 
     controller = module.get<ServiceController>(ServiceController);
-    service = module.get<ServiceService>(ServiceService);
+    module.get<ServiceService>(ServiceService);
     module.get<ServiceRepository>(ServiceRepository);
     module.get<EmployeeRepository>(EmployeeRepository);
   });
