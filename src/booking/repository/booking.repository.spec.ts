@@ -432,7 +432,7 @@ describe('BookingRepository', () => {
   describe('coba', () => {
     it('coba', async () => {
       // Arrange
-      const date = '2023-12-11';
+      const date = '2023-12-12';
 
       const service = {
         name: 'potong',
@@ -441,6 +441,7 @@ describe('BookingRepository', () => {
       };
       const newService = await serviceTableTestHelper.addService(service);
 
+      console.log(newService.id);
       const user1 = {
         password: 'andi123',
         email: 'andi123@gmail.com',

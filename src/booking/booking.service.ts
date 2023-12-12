@@ -142,10 +142,10 @@ export class BookingService {
     return { statusCode: HttpStatus.OK, data: booking };
   }
 
-  async getDataForDashboardUser(req: any) {
+  async getDataForDashboarddUser(req: any) {
     const userId = req.user.sub.id;
     const date = dayjs().format('YYYY-MM-DD');
-    let queque: number | null = null;
+    let queue: number | null = null;
     let serviceName: string | null = null;
 
     const transactionSucces =
@@ -166,7 +166,7 @@ export class BookingService {
     });
 
     if (foundIndex !== -1) {
-      queque = foundIndex + 1;
+      queue = foundIndex + 1;
     }
 
     if (bookings[foundIndex]) {
@@ -182,7 +182,7 @@ export class BookingService {
         booking: bookings[foundIndex],
         transactionSucces,
         lastTimeHaircut,
-        queque,
+        queue,
         serviceName,
       },
     };

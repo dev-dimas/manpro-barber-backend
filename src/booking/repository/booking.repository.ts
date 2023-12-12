@@ -48,6 +48,7 @@ export class BookingRepository {
         phone: userCreateBookingDto.phone,
         startTime: userCreateBookingDto.startTime,
         date: userCreateBookingDto.date,
+        status: BookingStatus.SUCCESS,
         endTime: userCreateBookingDto.endTime,
         barberman: userCreateBookingDto.barberman,
         user: {

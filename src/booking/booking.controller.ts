@@ -10,13 +10,13 @@ export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
   @Roles(Role.USER)
-  @Post('userbooking')
+  @Post('user-booking')
   postUserBooking(@Body() userCreateBookingDto: UserCreateBookingDto) {
     return this.bookingService.userAddBooking(userCreateBookingDto);
   }
 
   @Roles(Role.BARBERMAN)
-  @Post('employeebooking')
+  @Post('employee-booking')
   postEmployeeBooking(
     @Body() employeeCreateBookingDto: EmployeeCreateBookingDto,
   ) {
@@ -30,26 +30,26 @@ export class BookingController {
   }
 
   @Public()
-  @Get('bookingchart')
+  @Get('booking-chart')
   getBookingForChart(@Body() dateDto: DateDto) {
     return this.bookingService.getBookingForChart(dateDto);
   }
 
   @Roles(Role.BARBERMAN)
-  @Get('confirmbooking')
+  @Get('confirm-booking')
   getBookingForConfirmBooking() {
     return this.bookingService.getBookingForConfirmBooking();
   }
 
   @Roles(Role.USER)
-  @Get('transactionhistory')
+  @Get('transaction-history')
   getTransactionHistory(@Req() req: Request) {
     return this.bookingService.getTransactionHistory(req);
   }
 
   @Roles(Role.USER)
-  @Get('dashboaruser')
-  getdashboaruser(@Req() req: Request) {
-    return this.bookingService.getDataForDashboardUser(req);
+  @Get('dashboard-user')
+  getdashboarduser(@Req() req: Request) {
+    return this.bookingService.getDataForDashboarddUser(req);
   }
 }
