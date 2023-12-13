@@ -441,7 +441,6 @@ describe('BookingRepository', () => {
       };
       const newService = await serviceTableTestHelper.addService(service);
 
-      console.log(newService.id);
       const user1 = {
         password: 'andi123',
         email: 'andi123@gmail.com',

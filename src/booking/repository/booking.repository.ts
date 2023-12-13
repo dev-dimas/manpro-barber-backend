@@ -48,7 +48,7 @@ export class BookingRepository {
         phone: userCreateBookingDto.phone,
         startTime: userCreateBookingDto.startTime,
         date: userCreateBookingDto.date,
-        status: BookingStatus.SUCCESS,
+        // status: BookingStatus.SUCCESS,
         endTime: userCreateBookingDto.endTime,
         barberman: userCreateBookingDto.barberman,
         user: {
@@ -125,11 +125,13 @@ export class BookingRepository {
   }
 
   async getAllBookingByUserId(userId: string) {
-    return await this.repository.find({
-      where: { user: { id: userId } },
-      order: { date: 'DESC' },
-      take: 10,
-    });
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select(['booking.*', 'service.name As "serviceName"'])
+      .innerJoin('booking.service', 'service')
+      .where('booking.user = :id', { id: userId })
+      .orderBy('booking.date', 'DESC')
+      .execute();
   }
 
   async countAllBookingSuccesByUserId(userId: string) {
