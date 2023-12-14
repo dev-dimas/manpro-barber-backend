@@ -30,7 +30,7 @@ export class BookingController {
   }
 
   @Public()
-  @Get('booking-chart')
+  @Post('booking-chart')
   getBookingForChart(@Body() dateDto: DateDto) {
     return this.bookingService.getBookingForChart(dateDto);
   }
