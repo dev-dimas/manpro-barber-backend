@@ -77,6 +77,7 @@ export class BookingRepository {
         date: employeeCreateBookingDto.date,
         endTime,
         barberman,
+        status: BookingStatus.SUCCESS,
         employee: {
           id: employeeCreateBookingDto.employeeId,
         },
@@ -108,9 +109,6 @@ export class BookingRepository {
   }
 
   async getAllBookingByStatusBookingAndDate(date: string) {
-    // return await this.repository.find({
-    //   where: { status: BookingStatus.BOOKING },
-    // });
     return await this.repository
       .createQueryBuilder('booking')
       .select(['booking.*', 'service.name As "serviceName"'])
@@ -154,5 +152,84 @@ export class BookingRepository {
       order: { date: 'DESC' },
       take: 1,
     });
+  }
+
+  async getRecapDayly(startDate: string, endDate: string) {
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select('booking.date As date')
+      .addSelect('SUM(service.price) AS "total"')
+      .innerJoin('booking.service', 'service')
+      .where('booking.status = :status', { status: BookingStatus.SUCCESS })
+      .andWhere('booking.date >= :startDate AND booking.date <= :endDate', {
+        startDate,
+        endDate,
+      })
+      .groupBy('booking.date')
+      .orderBy('booking.date', 'ASC')
+      .execute();
+  }
+
+  async getRecapWeekly(startDate: string, endDate: string) {
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select('EXTRACT(WEEK FROM booking.date) AS week')
+      .addSelect('SUM(service.price) AS "total"')
+      .innerJoin('booking.service', 'service')
+      .where('booking.status = :status', { status: BookingStatus.SUCCESS })
+      .andWhere('booking.date >= :startDate AND booking.date <= :endDate', {
+        startDate,
+        endDate,
+      })
+      .groupBy('week')
+      .orderBy('week', 'ASC')
+      .execute();
+  }
+
+  async getRecapMonthly(startDate: string, endDate: string) {
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select('EXTRACT(MONTH FROM booking.date) AS month')
+      .addSelect('SUM(service.price) AS "total"')
+      .innerJoin('booking.service', 'service')
+      .where('booking.status = :status', { status: BookingStatus.SUCCESS })
+      .andWhere('booking.date >= :startDate AND booking.date <= :endDate', {
+        startDate,
+        endDate,
+      })
+      .groupBy('month')
+      .orderBy('month', 'ASC')
+      .execute();
+  }
+
+  async getRecapYearly(startDate: string, endDate: string) {
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select('EXTRACT(YEAR FROM booking.date) AS year')
+      .addSelect('SUM(service.price) AS "total"')
+      .innerJoin('booking.service', 'service')
+      .where('booking.status = :status', { status: BookingStatus.SUCCESS })
+      .andWhere('booking.date >= :startDate AND booking.date <= :endDate', {
+        startDate,
+        endDate,
+      })
+      .groupBy('year')
+      .orderBy('year', 'ASC')
+      .execute();
+  }
+
+  async getBookingByIdAndUserId(id: string, userId: string) {
+    return await this.repository
+      .createQueryBuilder('booking')
+      .select([
+        'booking.*',
+        'service.name As "serviceName"',
+        'service.price As "price"',
+        'service.duration As "serviceDuration"',
+      ])
+      .innerJoin('booking.service', 'service')
+      .where('booking.id = :id', { id })
+      .andWhere('booking.user = :userId', { userId })
+      .execute();
   }
 }

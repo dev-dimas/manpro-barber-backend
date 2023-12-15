@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import dayjs from 'dayjs';
 import { ServiceRepository } from '../service/repository/service.repository';
 import { BookingRepository } from './repository/booking.repository';
 import { EmployeeRepository } from '../employee/repository/employee.repository';
 import { DateDto, EmployeeCreateBookingDto, UserCreateBookingDto } from './dto';
 import { UserRepository } from '../user/repository/user.repository';
+import dayjs from 'dayjs';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 
 @Injectable()
 export class BookingService {
@@ -97,6 +98,18 @@ export class BookingService {
     return { statusCode: HttpStatus.CREATED, data: newBooking.raw[0] };
   }
 
+  async getBookingByIdAndUserId(id: string, req: any) {
+    const booking = await this.bookingRepository.getBookingById(id);
+    if (!booking)
+      throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
+
+    const res = await this.bookingRepository.getBookingByIdAndUserId(
+      id,
+      req.user.sub.id,
+    );
+    return { statusCode: HttpStatus.OK, data: res };
+  }
+
   async updateBookingStatus(id: string, req: any) {
     const booking = await this.bookingRepository.getBookingById(id);
     if (!booking)
@@ -185,6 +198,131 @@ export class BookingService {
         queue,
         serviceName,
       },
+    };
+  }
+
+  async getRecapByYear(dateDto: DateDto) {
+    const lengthReurnData = 5;
+    const year = dayjs(dateDto.date).format('YYYY');
+    const endDate = dayjs(`${year}-12-31`).format('YYYY-MM-DD');
+    const startDate = dayjs(`${year}-12-31`)
+      .subtract(4, 'year')
+      .format('YYYY-MM-DD');
+    const data = [];
+
+    for (let i = lengthReurnData - 1; i >= 0; i--) {
+      const date = dayjs(dateDto.date).subtract(i, 'year').format('YYYY-MM-DD');
+      data.push({ date, total: 0 });
+    }
+
+    const res = await this.bookingRepository.getRecapYearly(startDate, endDate);
+
+    data.forEach((element) => {
+      const year = dayjs(element.date).format('YYYY');
+      const matchDate = res.find((element2) => year === element2.year);
+
+      if (matchDate) {
+        element.total = matchDate.total;
+      }
+    });
+
+    return data;
+  }
+
+  async getRecapByMonth(dateDto: DateDto) {
+    const lengthReurnData = 12;
+    const day = dayjs(dateDto.date).format('DD');
+    const year = dayjs(dateDto.date).format('YYYY');
+    const startDate = dayjs(`${year}-01-${day}`).format('YYYY-MM-DD');
+    const endDate = dayjs(`${year}-12-31`).format('YYYY-MM-DD');
+    const data = [];
+
+    for (let i = 0; i < lengthReurnData; i++) {
+      const date = dayjs(startDate).add(i, 'month').format('YYYY-MM-DD');
+      data.push({ date, total: 0 });
+    }
+
+    const res = await this.bookingRepository.getRecapMonthly(
+      startDate,
+      endDate,
+    );
+
+    data.forEach((element) => {
+      const month = dayjs(element.date).format('MM');
+      const matchDate = res.find((element2) => month === element2.month);
+
+      if (matchDate) {
+        element.total = matchDate.total;
+      }
+    });
+
+    return data;
+  }
+
+  async getRecapByWeek(dateDto: DateDto) {
+    dayjs.extend(weekOfYear);
+    const lengthReurnData = 4;
+    const data = [];
+
+    for (let i = lengthReurnData - 1; i >= 0; i--) {
+      const date = dayjs(dateDto.date).subtract(i, 'week').format('YYYY-MM-DD');
+      data.push({ date, total: 0 });
+    }
+
+    const res = await this.bookingRepository.getRecapWeekly(
+      data[0].date,
+      dateDto.date,
+    );
+
+    data.forEach((element) => {
+      const week = dayjs(element.date).week();
+      const matchDate = res.find((element2) => `${week}` === element2.week);
+
+      if (matchDate) {
+        element.total = matchDate.total;
+      }
+    });
+
+    return data;
+  }
+
+  async getRecapByDay(dateDto: DateDto) {
+    const lengthReurnData = 8;
+    const data = [];
+
+    for (let i = lengthReurnData - 1; i >= 0; i--) {
+      const date = dayjs(dateDto.date).subtract(i, 'day').format('YYYY-MM-DD');
+      data.push({ date, total: 0 });
+    }
+
+    const res = await this.bookingRepository.getRecapDayly(
+      data[0].date,
+      dateDto.date,
+    );
+
+    res.forEach((element: { date: string }) => {
+      element.date = dayjs(element.date).format('YYYY-MM-DD');
+    });
+
+    data.forEach((element) => {
+      const matchDate = res.find((element2) => element.date === element2.date);
+
+      if (matchDate) {
+        element.total = matchDate.total;
+      }
+    });
+
+    return data;
+  }
+
+  async getRecap(dateDto: DateDto) {
+    const dayly = await this.getRecapByDay(dateDto);
+    const weekly = await this.getRecapByWeek(dateDto);
+    const monthly = await this.getRecapByMonth(dateDto);
+    const yearly = await this.getRecapByYear(dateDto);
+    return {
+      statusCode: HttpStatus.OK,
+      data: { dayly, weekly, monthly, yearly },
     };
   }
 }

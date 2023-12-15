@@ -23,6 +23,12 @@ export class BookingController {
     return this.bookingService.employeeAddBooking(employeeCreateBookingDto);
   }
 
+  @Roles(Role.USER)
+  @Get('booking/:id')
+  getBookingByIdAndUserId(@Param('id') id: string, @Req() req: Request) {
+    return this.bookingService.getBookingByIdAndUserId(id, req);
+  }
+
   @Roles(Role.BARBERMAN)
   @Patch('booking/:id')
   updateBookingStatus(@Param('id') id: string, @Req() req: Request) {
@@ -51,5 +57,11 @@ export class BookingController {
   @Get('dashboard-user')
   getdashboarduser(@Req() req: Request) {
     return this.bookingService.getDataForDashboarddUser(req);
+  }
+
+  @Public()
+  @Post('recap')
+  getRecap(@Body() dateDto: DateDto) {
+    return this.bookingService.getRecap(dateDto);
   }
 }
