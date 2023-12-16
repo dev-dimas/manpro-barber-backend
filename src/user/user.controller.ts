@@ -29,7 +29,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @Public()
+  @Roles(Role.USER)
   @Get(':user')
   findOne(
     @Param(

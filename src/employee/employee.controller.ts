@@ -43,7 +43,7 @@ export class EmployeeController {
     return this.employeeService.updateEmployee(id, updateEmployee);
   }
 
-  @Public()
+  @Roles(Role.BARBERMAN, Role.OWNER)
   @Get(':employee')
   getEmployee(
     @Param(

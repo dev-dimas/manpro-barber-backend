@@ -109,14 +109,9 @@ export class BookingRepository {
   }
 
   async getAllBookingByStatusBookingAndDate(date: string) {
-    return await this.repository
-      .createQueryBuilder('booking')
-      .select(['booking.*', 'service.name As "serviceName"'])
-      .innerJoin('booking.service', 'service')
-      .where('booking.status = :status', { status: BookingStatus.BOOKING })
-      .andWhere('booking.date = :date', { date })
-      .orderBy('booking.startTime', 'ASC')
-      .execute();
+    return await this.repository.find({
+      where: { status: BookingStatus.BOOKING, date },
+    });
   }
 
   async getAllBookingByDate(date: string) {

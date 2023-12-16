@@ -316,13 +316,13 @@ export class BookingService {
   }
 
   async getRecap(dateDto: DateDto) {
-    const dayly = await this.getRecapByDay(dateDto);
+    const daily = await this.getRecapByDay(dateDto);
     const weekly = await this.getRecapByWeek(dateDto);
     const monthly = await this.getRecapByMonth(dateDto);
     const yearly = await this.getRecapByYear(dateDto);
     return {
       statusCode: HttpStatus.OK,
-      data: { dayly, weekly, monthly, yearly },
+      data: { daily, weekly, monthly, yearly },
     };
   }
 }
