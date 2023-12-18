@@ -217,7 +217,14 @@ export class BookingRepository {
     return await this.repository
       .createQueryBuilder('booking')
       .select([
-        'booking.*',
+        'booking.id As id',
+        "TO_CHAR(booking.date, 'YYYY-MM-DD') As date",
+        'booking.startTime As startTime',
+        'booking.endTime As endTime',
+        'booking.status As status',
+        'booking.name As name',
+        'booking.phone As phone',
+        'booking.barberman As barberman',
         'service.name As "serviceName"',
         'service.price As "price"',
         'service.duration As "serviceDuration"',

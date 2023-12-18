@@ -107,7 +107,7 @@ export class BookingService {
       id,
       req.user.sub.id,
     );
-    return { statusCode: HttpStatus.OK, data: res };
+    return { statusCode: HttpStatus.OK, data: res[0] };
   }
 
   async updateBookingStatus(id: string, req: any) {
