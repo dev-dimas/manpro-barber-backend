@@ -1,22 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
-import { LoginModule } from './login/login.module';
-import { EmployeeModule } from './employee/employee.module';
-import { ServiceModule } from './service/service.module';
-import { BarberModule } from './barber/barber.module';
 import { APP_GUARD, Reflector } from '@nestjs/core';
-import { AuthGuard } from './guard/auth.guard';
 import { JwtService } from '@nestjs/jwt';
-import { RolesGuard } from './guard/role.guard';
-import { SeederModule } from './seeder/seeder.module';
-import { BookingModule } from './booking/booking.module';
-import { PasswordController } from './password/password.controller';
-import { PasswordService } from './password/password.service';
-import { PasswordModule } from './password/password.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AvatarController } from './avatar/avatar.controller';
+import { BarberModule } from './barber/barber.module';
+import { BookingModule } from './booking/booking.module';
+import { EmployeeModule } from './employee/employee.module';
+import { AuthGuard } from './guard/auth.guard';
+import { RolesGuard } from './guard/role.guard';
+import { LoginModule } from './login/login.module';
+import { PasswordModule } from './password/password.module';
 import { PaymentModule } from './payment/payment.module';
+import { SeederModule } from './seeder/seeder.module';
+import { ServiceModule } from './service/service.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   providers: [

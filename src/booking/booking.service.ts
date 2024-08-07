@@ -35,6 +35,7 @@ export class BookingService {
         dayjs(date).toDate(),
       );
 
+    console.log(numberOfBooking);
     if (numberOfBooking >= employeeInCharge) return { status: true };
 
     const employee = await this.employeeRepository.getAllEmployee();
@@ -88,6 +89,7 @@ export class BookingService {
     if (bookingIsFull.status)
       return { statusCode: HttpStatus.CONFLICT, message: 'full' };
 
+    // console.log(bookingIsFull);
     const newBooking = await this.bookingRepository.employeeAddBooking(
       employeeCreateBookingDto,
       bookingIsFull.endTime,

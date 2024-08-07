@@ -19,7 +19,7 @@ export class BookingRepository {
     return await this.repository
       .createQueryBuilder('booking')
       .where('booking.date = :date', { date })
-      .andWhere('booking.status = :status', { status: BookingStatus.BOOKING })
+      // .andWhere('booking.status = :status', { status: BookingStatus.BOOKING })
       // .andWhere('booking.status NOT IN (:...ids)', {
       //   ids: [BookingStatus.SUCCESS, BookingStatus.FAILED],
       // })
@@ -110,7 +110,10 @@ export class BookingRepository {
 
   async getAllBookingByStatusBookingAndDate(date: string) {
     return await this.repository.find({
-      where: { status: BookingStatus.BOOKING, date },
+      where: {
+        // status: BookingStatus.BOOKING,
+        date,
+      },
     });
   }
 

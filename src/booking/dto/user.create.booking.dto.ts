@@ -3,7 +3,6 @@ import {
   IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsUUID,
 } from 'class-validator';
