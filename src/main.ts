@@ -1,11 +1,22 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { AuthGuard } from './guard/auth.guard';
+import { JwtService } from '@nestjs/jwt';
+import { RolesGuard } from './guard/role.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: process.env.NODE_ENV === 'development' ? '*' : false,
+  });
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalGuards(
+    new AuthGuard(new JwtService(), new Reflector()),
+    new RolesGuard(new Reflector()),
+  );
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('Barber App')
@@ -17,7 +28,6 @@ async function bootstrap() {
     customSiteTitle: 'Barber App API',
   });
 
-  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
 bootstrap();
